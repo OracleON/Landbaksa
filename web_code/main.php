@@ -7,9 +7,38 @@
 
 </head>
 
+<script>
+	$(function (){
+		$("#hearder_frame_menu1").attr('class','hearder_frame_menu_select');
+	});
+</script>
+
+<style>
+	#wrap{width: 1000px; height: auto; margin-left: auto; margin-right: auto; background: #f8f8f8;}
+	#top_warp{width: 1000px; height: auto; margin-left: auto; margin-right: auto;}
+	#body_wrap{width: 1000px; height: auto; margin-left: auto; margin-right: auto;}
+	#bottom_wrap{width: 1000px; height: 80px; margin-left: auto; margin-right: auto; background: #f8f8f8;}
+	
+	#body_warp_frame{width: 1000px; height: auto; min-height: 500px; text-align: center; margin-left: auto; margin-right: auto; background: #f8f8f8;}
+	
+</style>
+
+
 <body bgcolor="#f0f0f0">
+	
 	<div id="wrap">
-		땅꾼박사 프로젝트 시작~~!!
+		
+		<div id='top_warp'>
+			<?php include_once $_SERVER["DOCUMENT_ROOT"]."/landbaksa/web_code/common_top.php"; ?>
+		</div>
+		<div id="body_wrap">
+			<div id="body_warp_frame">
+				검색페이지 
+			</div>
+		</div>
+		<div id="bottom_wrap">
+			
+		</div>
 	</div>	
 	
 </body>	
