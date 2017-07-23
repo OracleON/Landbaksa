@@ -34,8 +34,23 @@ function logoutmangonote()
 	#hearder_frame_logo{float: left; width: 150px; height: 75px; line-height: 75px; color: black; font-size: 17px; font-weight: 800; text-align: center;}
 	.hearder_frame_menu{float: left; width: 100px; height: 75px; line-height: 75px; color: #8c8d90; font-size: 15px; font-weight: 200; text-align: center;}
 	.hearder_frame_menu_select{float: left; width: 100px; height: 75px; line-height: 75px; color: #0068b7; font-size: 15px; font-weight: 500; text-align: center;}
-	#hearder_frame_login_bt{float: right; width: 80px; height: 40px; line-height: 40px; text-align: center; color: #0068b7; font-size: 13px; border: 1px solid #0068b7; border-radius: 5px; margin-top: 15px; margin-right: 30px;}
+	#hearder_frame_login_bt{float: right; width: 80px; height: 40px; line-height: 40px; text-align: center; color: #0068b7; font-size: 13px; border: 1px solid #0068b7; border-radius: 5px; margin-top: 15px; margin-right: 30px; }
 	a{text-decoration: none; color: inherit; }
+	
+	#hearder_frame_logout_bt{float: right; width: 80px; height: 40px; line-height: 40px; text-align: center; color: #0068b7; font-size: 13px; border: 1px solid #0068b7; border-radius: 5px; margin-top: 15px; margin-right: 30px; }
+	
+	
+	#login_bt_frame{
+		float: right;
+		width: 100px;
+		height: 75px;
+	}
+	
+	#logout_bt_frame{
+		float: right;
+		width: 100px;
+		height: 75px;
+	}
 </style>
 
 <script>
@@ -56,20 +71,15 @@ function mangonote_search()
 
 function show_nomember_msg()
 {
-	alert("로그인부터 하셔야 합니다.");
-	location.href = "http://mangonote.co.kr/mangonote/web/mangonotemall/signup/mangonote_login.php";
-	
-	//var templogoutmsg = document.getElementById('nonmember_msg_div');
-	
-	//alert(templogoutmsg);
-	
-	//$('#nonmember_msg_div22').css({"background-color":"black","opacity":"1.0","display":"block"});
-	
-	//templogoutmsg.setAttribute("style", "display: block;");
+	$('#login_bt_frame').css({"display":"block"});
+	$('#logout_bt_frame').css({"display":"none"});
 }
 function close_nomember_msg()
 {
 	//$('#nonmember_msg_div22').css({"background-color":"black","display":"none"});
+	alert('asd');
+	$('#login_bt_frame').css({"display":"none"});
+	$('#logout_bt_frame').css({"display":"block"});
 }
 
 
@@ -79,30 +89,19 @@ function close_nomember_msg()
 		if(isset($_COOKIE["userid"]))
 		{
 				$userid = $_COOKIE["userid"];
-				$username = $_COOKIE["username"];
-				$shopcode = $_COOKIE["shopcode"];
-				$shopname = $_COOKIE["shopname"];
-				$shopimage = $_COOKIE["shopimage"];
-				$location = $_COOKIE["location"];
-				$phonenum = $_COOKIE["phonenum"];
-				$hpnum = $_COOKIE["hpnum"];
-				$shopcheck = $_COOKIE["shopcheck"];
-				$sendmethod = $_COOKIE["sendmethod"];
-				$autodeliveryok = $_COOKIE["autodeliveryok"];
-				$userGrade = $_COOKIE["userGrade"];
-				$transcompany = $_COOKIE["transcompany"];	
-
+				$username = $_COOKIE["username"];	
 		}
 		
 		//echo "id:".$userid;
 		if($userid == null)
 		{
 			 //echo "아이디 없다.".$userid;
-			 //echo("<script language='javascript'>show_nomember_msg()</script>"); 
+			 echo("<script language='javascript'>show_nomember_msg()</script>"); 
+			 
 		}else
 		{
 			//echo "아이디 있다.".$userid;
-			// echo("<script language='javascript'>close_nomember_msg()</script>"); 
+			echo("<script language='javascript'>close_nomember_msg()</script>"); 
 		}
 		
 		
@@ -129,8 +128,17 @@ function close_nomember_msg()
 		</div>
 	</div>
 	<div id="hearder_frame_right">
-		<div id="hearder_frame_login_bt">
-			로그인
+		<div id="login_bt_frame">
+			<a href="login.php">
+			<div id="hearder_frame_login_bt">
+				로그인
+			</div>
+			</a>
+		</div>
+		<div id="logout_bt_frame">
+			<div id="hearder_frame_logout_bt">
+				로그아웃
+			</div>
 		</div>
 	</div>	
 	
