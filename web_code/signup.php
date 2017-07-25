@@ -182,7 +182,7 @@
 		
 	}
 	
-	#login_bt_frame{float: left; width: 400px; height: 80px; margin-top:0px; margin-left: 300px;}
+	#login_bt_frame_signup{float: left; width: 400px; height: 80px; margin-top:0px; margin-left: 300px; border: 0px solid black;}
 	#signup_bt{float: left; width: 130px; height: 40px; line-height: 40px; border: 1px solid #0068b7; border-radius: 5px; text-align: center;
 		color:white; background: #0068b7; font-size: 14px; font-weight: 300;
 		margin-left: 216px;
@@ -261,13 +261,12 @@
 					<input type="pwd" id="pwd2" name"pwd2"  class="id_pwd_input" placeholder="비밀번호 확인.">
 					<input type="text" id="username" name"username"  class="id_pwd_input" placeholder="이름을 입력하세요.">
 				</div>
-				<div id="login_bt_frame">
+				<div id="login_bt_frame_signup">
 					<a href="javascript:singup()">
 						<div id="signup_bt">
 							회원가입
 						</div>
 					</a>
-		
 				</div> 
 			</div>
 		</div>
