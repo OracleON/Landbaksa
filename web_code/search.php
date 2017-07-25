@@ -34,7 +34,7 @@
 	
 		
 		$('#search_address_input').on('click',function(){
-			var tempaddress = $('#address').val();
+			/*var tempaddress = $('#address').val();
 			if(tempaddress =='')
 			{
 				//alert('주소 API호출');
@@ -43,7 +43,12 @@
 			{
 				
 			}
-			
+			*/
+			$('#address').val('');
+			$('#lawcode').val('');
+			$('#jibun').val('');
+			$('#apartment').val('');
+			sample6_execDaumPostcode();
 		});
 		
 		$('#search_bt').on('click',function(){
@@ -60,8 +65,11 @@
 				//alert(Array_address[0]+'/'+Array_address[1]+'/'+Array_address[2]);
 				
 				//alert('감정시작!!');
+				var lawcode = $('#lawcode').val();
+				var jibun = $('#jibun').val();
+				var apartment = $('#apartment').val();
 				
-				location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address;
+				location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
 			}
 			
 		});
@@ -79,7 +87,15 @@
                 // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
                 var fullAddr = ''; // 최종 주소 변수
                 var extraAddr = ''; // 조합형 주소 변수
-
+                var bcode = '';//법정동코드
+                var bunji = ''; //번지
+                var apart_type =''; //아파트여부
+				
+				apart_type = data.apartment;
+				bunji = data.jibunAddressEnglish.split(",");
+				
+				bcode = data.bcode;
+				
                 // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
                 if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
                     fullAddr = data.roadAddress;
@@ -105,6 +121,10 @@
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 //document.getElementById('sample6_postcode').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('address').value = fullAddr;
+                document.getElementById('lawcode').value = bcode;
+                document.getElementById('jibun').value = bunji[0];
+                document.getElementById('apartment').value = apart_type;
+                
 
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById('address').focus();
@@ -115,9 +135,9 @@
 
 <style>
 	#wrap{width: 1000px; height: auto; margin-left: auto; margin-right: auto; background: #f8f8f8;}
-	#top_warp{width: 1000px; height: auto; margin-left: auto; margin-right: auto;}
+	#top_warp{float: left;width: 1000px; height: auto; margin-left: auto; margin-right: auto;}
 	#body_wrap{float: left; width: 1000px; height: auto; margin-left: auto; margin-right: auto;}
-	#bottom_wrap{width: 1000px; height: 80px; margin-left: auto; margin-right: auto; background: #f8f8f8;}
+	#bottom_wrap{float: left;width: 1000px; height: 80px; margin-left: auto; margin-right: auto; background: #f8f8f8;}
 	
 	#body_warp_frame{float: left; width: 1000px; height: auto; min-height: 500px; text-align: center; margin-left: auto; margin-right: auto; background: #f8f8f8;}
 	
@@ -162,6 +182,16 @@
 		margin-bottom: 100px;
 		background: blue;
 	}
+	
+	#search_data_frame{
+		float: left;
+		width: 300px;
+		height:40px;
+		border: 0px solid red;
+	}
+	.hidden_input{
+		display: none;
+	}
 </style>
 
 
@@ -182,6 +212,11 @@
 					<div id="search_bt">
 						감정시작
 					</div>
+				</div>
+				<div id="search_data_frame">
+					<input type="text" id="lawcode" class="hidden_input">
+					<input type="text" id="jibun" class="hidden_input">
+					<input type="text" id="apartment" class="hidden_input">
 				</div>				
 			</div>
 			
