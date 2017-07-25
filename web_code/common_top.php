@@ -1,13 +1,35 @@
 <script>
+	
+	<?
+		if(isset($_COOKIE["userid"]))
+		{
+				$userid = $_COOKIE["userid"];
+				$username = $_COOKIE["username"];	
+		}
+	?>
+	
+	$(function (){
+	<?
+		if($userid == null)
+		{
+	?>
+	show_nomember_msg();
+	<?		 
+		}else
+		{
+	?>
+	close_nomember_msg();
+	<?	
+		}
+	?>
+
+	});
+	
 function logoutmangonote()
  {
  	 setCookie('userid', '', -1);
  	 setCookie('username', '', -1);
- 	 setCookie('shopcode', '', -1);
- 	 setCookie('shopname', '', -1);
- 	 setCookie('shopcheck', '', -1);
- 	 setCookie('regdate', '', -1);
-	 location.href = "http://mangonote.co.kr/mangonote/web/mangonotemall/signup/mangonote_login.php";
+ 	location.href = "http://mangonote.co.kr/mangonote/web/mangonotemall/signup/mangonote_login.php";
  }
  
  function setCookie(cName, cValue, cDay)
@@ -19,6 +41,9 @@ function logoutmangonote()
       document.cookie = cookies;
  }
  
+ 
+
+
  
 </script>
 
@@ -44,12 +69,15 @@ function logoutmangonote()
 		float: right;
 		width: 100px;
 		height: 75px;
+		display: none;
 	}
 	
 	#logout_bt_frame{
 		float: right;
 		width: 100px;
 		height: 75px;
+		
+		display: none;
 	}
 </style>
 
@@ -77,36 +105,23 @@ function show_nomember_msg()
 function close_nomember_msg()
 {
 	//$('#nonmember_msg_div22').css({"background-color":"black","display":"none"});
-	alert('asd');
-	$('#login_bt_frame').css({"display":"none"});
-	$('#logout_bt_frame').css({"display":"block"});
+	
+	$("#login_bt_frame").css("display","none");
+	$("#logout_bt_frame").css("display","block");
+	
+}
+
+function logout()
+{
+	 setCookie('userid', '', -1);
+ 	 setCookie('username', '', -1);
+ 	 location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/login.php";
 }
 
 
 </script>
 
-<?
-		if(isset($_COOKIE["userid"]))
-		{
-				$userid = $_COOKIE["userid"];
-				$username = $_COOKIE["username"];	
-		}
-		
-		//echo "id:".$userid;
-		if($userid == null)
-		{
-			 //echo "아이디 없다.".$userid;
-			 echo("<script language='javascript'>show_nomember_msg()</script>"); 
-			 
-		}else
-		{
-			//echo "아이디 있다.".$userid;
-			echo("<script language='javascript'>close_nomember_msg()</script>"); 
-		}
-		
-		
-?>
-
+ 
 
 	
 <div  id="main_header">
@@ -115,7 +130,7 @@ function close_nomember_msg()
 			<a href="/landbaksa/web_code/search.php">땅꾼박사</a>
 		</div>
 		<div id="hearder_frame_menu1" class="hearder_frame_menu">
-			<a href="/landbaksa/web_code/search.php">검색</a>
+			<a href="/landbaksa/web_code/search.php">통합검색</a>
 		</div>
 		<div id="hearder_frame_menu2" class="hearder_frame_menu">
 			<a href="/landbaksa/web_code/search_detail.php">물건비교</a>
@@ -136,9 +151,11 @@ function close_nomember_msg()
 			</a>
 		</div>
 		<div id="logout_bt_frame">
-			<div id="hearder_frame_logout_bt">
-				로그아웃
-			</div>
+			<a href="javascript:logout()">
+				<div id="hearder_frame_logout_bt">
+					로그아웃
+				</div>
+			</a>
 		</div>
 	</div>	
 	
