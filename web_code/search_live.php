@@ -10,6 +10,21 @@
 <script>
 	$(function (){
 		$("#hearder_frame_menu4").attr('class','hearder_frame_menu_select');
+		<?
+		if(isset($_COOKIE["userid"]))
+		{
+				$userid = $_COOKIE["userid"];
+				$username = $_COOKIE["username"];	
+		}
+		if($userid == null)
+		{
+		?>
+		alert('로그인이 필요합니다.\n로그인 페이지로 이동합니다.');
+		location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/login.php?cate=1";
+
+		<?
+		}
+		?>
 	});
 </script>
 
