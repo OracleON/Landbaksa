@@ -130,10 +130,10 @@ function logout()
 			<a href="/landbaksa/web_code/search.php">땅꾼박사</a>
 		</div>
 		<div id="hearder_frame_menu1" class="hearder_frame_menu">
-			<a href="/landbaksa/web_code/search.php">통합검색</a>
+			<a href="/landbaksa/web_code/search.php">주소검색</a>
 		</div>
 		<div id="hearder_frame_menu2" class="hearder_frame_menu">
-			<a href="/landbaksa/web_code/search_detail.php">물건비교</a>
+			<a href="/landbaksa/web_code/search_detail.php">정보입력검색</a>
 		</div>
 		<div id="hearder_frame_menu3" class="hearder_frame_menu">
 			<a href="/landbaksa/web_code/search_my.php">지난검색</a>
