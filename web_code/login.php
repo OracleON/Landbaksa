@@ -75,7 +75,7 @@
 		
 	}
 	
-	#login_bt_frame{float: left; width: 400px; height: 80px; margin-top:0px; margin-left: 300px;}
+	#login_bt_frame_login{float: left; width: 400px; height: 80px; margin-top:0px; margin-left: 300px;}
 	#signup_bt{float: left; width: 130px; height: 40px; line-height: 40px; border: 1px solid #0068b7; border-radius: 5px; text-align: center;
 		color #0068b7; background: white; font-size: 14px; font-weight: 300;
 		margin-left: 116px;
@@ -84,10 +84,7 @@
 		text-align: center; color: white; background: #0068b7; font-size: 14px; font-weight: 300;
 		margin-left: 20px;
 	}
-	
-	#resultLog{
-		 color: #ff9200;
-	 }
+
 </style>
 
 
@@ -104,7 +101,7 @@
 					<input type="text" id="userid" name="userid" class="id_pwd_input" placeholder="아이디를 입력하세요.">
 					<input type="pwd" id="pwd" name"pwd"  class="id_pwd_input" placeholder="비밀번호를 입력하세요.">
 				</div>
-				<div id="login_bt_frame">
+				<div id="login_bt_frame_login">
 					<a href="signup.php">
 						<div id="signup_bt">
 							회원가입
