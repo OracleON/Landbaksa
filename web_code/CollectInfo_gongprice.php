@@ -22,7 +22,7 @@
 	$ji = "0000".$tempjibun[1];
 	$ji = substr($ji, -4,4);
 
-	// 오늘 날짜(년월)
+	// 오늘 날짜(년)
 	$today = date('Ym');
 
 
@@ -62,24 +62,42 @@
         return $data;
     }
 
+/*건물 공시지가 데이터 삽입*/
     $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji);
 
-    echo $responseData['indvdHousingPrices']['field'][0]['ldCode'];
-//    var_dump($data['indvdHousingPrices']['field'][0]['ldCode']);
-//    var_dump($data->indvdHousingPrices);
-//    echo $data['indvdHousingPrices']['field'];
-    /*$object = simplexml_load_string($data);
-    $newobject = json_encode($object);
-    $object_json = json_decode($newobject,true);
-    
-    echo($newobject."/////==>".$object_json."<===/////");
-	echo "object_json[0] = ".$object_json->body->totalCount;
-	echo("-----");
-	echo $object_json['header'];
-	echo("-----");
-	echo $object_json['body'][0];*/
+//    echo $responseData['indvdHousingPrices']['field'][0]['ldCode'];
+    echo $responseData['indvdHousingPrices']['totalCount'];
 
-	
+    $totalCount = $responseData['indvdHousingPrices']['totalCount'];
+    for($i = 0; $i < $totalCount; $i++) {
+//        var_dump($responseData['indvdHousingPrices']['field'][$i]);
+        $elem = $responseData['indvdHousingPrices']['field'][$i];
+
+        $pnu = $elem['pnu'];
+        $ldCode = $elem['ldCode'];
+        $ldCodeNm = $elem['ldCodeNm'];
+        $regstrSeCode = $elem['regstrSeCode'];
+        $regstrSeCodeNm = $elem['regstrSeCodeNm'];
+        $mnnmSlno = $elem['mnnmSlno'];
+        $bildRegstrEsntlNo = $elem['bildRegstrEsntlNo'];
+        $stdrYear = $elem['stdrYear'];
+        $stdrMt = $elem['stdrMt'];
+        $dongCode = $elem['dongCode'];
+        $ladRegstrAr = $elem['ladRegstrAr'];
+        $calcPlotAr = $elem['calcPlotAr'];
+        $buldAllTotAr = $elem['buldAllTotAr'];
+        $buldCalcTotAr = $elem['buldCalcTotAr'];
+        $housePc = $elem['housePc'];
+        $stdLandAt = $elem['stdLandAt'];
+        $lastUpdtDt = $elem['lastUpdtDt'];
+
+        $insertsql = "INSERT INTO landbaksa_gongprice_building_info SET pnu='$pnu', ldCode='$ldCode', ldCodeNm='$ldCodeNm', regstrSeCode='$regstrSeCode', regstrSeCodeNm='$regstrSeCodeNm', mnnmSlno='$mnnmSlno', bildRegstrEsntlNo='$bildRegstrEsntlNo', stdrYear='$stdrYear', stdrMt='$stdrMt', dongCode='$dongCode', ladRegstrAr='$ladRegstrAr', calcPlotAr='$calcPlotAr', buldAllTotAr='$buldAllTotAr', buldCalcTotAr='$buldCalcTotAr', housePc='$housePc', stdLandAt='$stdLandAt', lastUpdtDt='$lastUpdtDt'";
+
+        $temp = mysql_query($insertsql);
+    }
+
+    $totalCount = 0;
+
 	 //echo($data."==>".$object."//날짜:".$resultCode."/".$useQty."/".$useYm);
 	/*	
 	$insertsql = "INSERT INTO landbaksa_user SET userid='$userid',pwd='$pwd',username='$username',regdate=NOW()";
