@@ -32,7 +32,7 @@
 
 /*요청 생성 함수 정의*/
     function getRequestData($baseURL, $lawCode, $mainAddr, $subAddr) {
-        $numOfRows = 10; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
+        $numOfRows = 9999; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
         $stdrYear = 2012; // 데이터 조회 기준년도
         $landBookCode = 1; // 토지(임야)대장구분
         $format = 'json'; // 응답데이터 형식 구분
