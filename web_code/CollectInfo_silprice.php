@@ -13,12 +13,20 @@
 	
 	$tempjibun = split('-', $jibun);
 	
-	$sigunguCd = substr($lawcode, 0,5);
-	$bjdongCd = substr($lawcode, 5,9);
-	$bun = "0000".$tempjibun[0];
+	//sample code
+	$sigunguCd = "11500"; 
+	$bjdongCd = "10800";
+	$bun = "1374"; 
 	$bun = substr($bun, -4,4);
-	$ji = "0000".$tempjibun[1];
+	$ji = "0000";
 	$ji = substr($ji, -4,4);
+
+// 	$sigunguCd = substr($lawcode, 0,5); // 11500
+// 	$bjdongCd = substr($lawcode, 5,9); // 10800
+// 	$bun = "0000".$tempjibun[0]; // 1374
+// 	$bun = substr($bun, -4,4); 
+// 	$ji = "0000".$tempjibun[1]; // 0000
+// 	$ji = substr($ji, -4,4);
 	
 	$today = date('Ym');
 	
