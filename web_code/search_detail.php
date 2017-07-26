@@ -12,7 +12,6 @@
 	
 	
 	
-	
 	$(function (){
 		$("#hearder_frame_menu2").attr('class','hearder_frame_menu_select');
 		
@@ -31,7 +30,8 @@
 		<?
 		}
 		?>
-	
+		
+		
 		
 		$('#search_address_input').on('click',function(){
 			/*var tempaddress = $('#address').val();
@@ -53,10 +53,35 @@
 		
 		$('#search_bt').on('click',function(){
 			var tempaddress = $('#address').val();
+			var tempsellprice = $('#sellprice').val();
+			var tempbankprice = $('#bankprice').val();
+			var tempdepositprice = $('#depositprice').val();
+			var tempmonthprice = $('#monthprice').val();
 			
 			if(tempaddress == '')
 			{
 				alert('주소를 입력하세요.');
+			}else if(tempsellprice == '')
+			{
+				alert('매매가를 입력하세요.');
+				
+			}else if(tempbankprice == '')
+			{
+				alert('대출금액을 입력하세요.없으면 0을 입력하세요');
+			}else if(tempdepositprice == '')
+			{
+				alert('보증금을 입력하세요.없으면 0을 입력하세요');
+			}else if(tempmonthprice == '')
+			{
+				alert('월세금액을 입력하세요.없으면 0을 입력하세요');
+			}else if(tempsellprice.substr(0, 1) == 0)
+			{
+				alert('매매가를 0으로 할수 없습니다.다시 입력하세요.');
+				
+			}else if(tempsellprice.length < 8)
+			{
+				alert('매매금액이 너무 작습니다. 다시 입력하세요.');
+				
 			}else
 			{
 				var tempaddress2 = tempaddress.replace('(', '');
@@ -65,15 +90,105 @@
 				//alert(Array_address[0]+'/'+Array_address[1]+'/'+Array_address[2]);
 				
 				//alert('감정시작!!');
+				var tempuserid = '<?echo $userid?>';
 				var lawcode = $('#lawcode').val();
 				var jibun = $('#jibun').val();
 				var apartment = $('#apartment').val();
 				
-				location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+				$('#background_layer').fadeIn();
+				$('#loading').fadeIn();
+				
+				var getparams = {userid:tempuserid,username:'<?echo $username?>',law_code:lawcode,ji_bun:jibun,apartment_type:apartment,search_type:'info',address:tempaddress,sellprice:tempsellprice,bankprice:tempbankprice,depositprice:tempdepositprice,monthprice:tempmonthprice};
+						//alert('getparams 준비.'+getparams);
+				$.getJSON("CollectInfo.php",getparams,function(data){	
+					$.each(data, function(key, value){
+							if(key == "signupJson")
+							{
+								if(value == "insertok")
+								{
+									changeok = "ok";
+									//alert('로그인 성공입니다.');
+									$('#output').empty().append('온라인 감정 성공 입니다.');
+									$('#output2').empty().append('분석결과 페이지로 이동합니다.');
+									
+									setTimeout(function(){
+												//$('#loading').fadeOut();
+												//$("#loding").popup("close");
+												//$('#loading').hide();
+												
+												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=info;
+												 }, 1000);
+								}
+								if(value == "no")
+								{
+									changeok = "not";	
+									$('#output2').empty().append('감정정보가 부족합니다.');
+									//$('#loading').hide();
+									setTimeout(function(){
+												alert('감정에 실패하였습니다..');
+												$('#background_layer').fadeOut();
+												$('#loading').fadeOut();
+												 }, 1000);
+									
+								}
+	
+								if(value == "error")
+								{
+									changeok = "not";
+									$('#output').append('DATA BASE ERROR!!!!.');
+									setTimeout(function(){
+												$('#loading').fadeOut();
+												$('#background_layer').fadeOut();
+												//$("#loding").popup("close");
+												//$('#loading').hide();
+												 }, 1000);
+								}
+								
+							}
+							
+					});
+					
+					if(changeok =="ok")
+					{
+						//location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+						
+					}else{
+						//alert('감정에 실패하였습니다..');
+						//$('#background_layer').fadeOut();
+						//$('#loading').fadeOut();
+					}	
+				});	
 			}
 			
 		});
 	});
+	
+	var rgx1 = /\D/g;
+	var rgx2 = /(\d+)(\d{3})/;
+	
+	
+	function getNumber(obj){
+	
+	     var num01;
+	     var num02;
+	     num01 = obj.value;
+	     num02 = num01.replace(rgx1,"");
+	     num01 = setComma(num02);
+	     obj.value =  num01;
+	
+	}
+	
+	function setComma(inNum){
+	     
+	     var outNum;
+	     outNum = inNum; 
+	     while (rgx2.test(outNum)) {
+	          outNum = outNum.replace(rgx2, '$1' + ',' + '$2');
+	      }
+	     return outNum;
+	
+	}
+
 </script>
 
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
@@ -204,7 +319,7 @@
 	}
 
 	.search_info_input{
-		float: left; width: 195px; height: 50px; line-height: 50px; background: white; color: #2e323e; font-size: 18px; text-align: left; padding-left: 10px;
+		float: left; width: 195px; height: 50px; line-height: 50px; background: white; color: #2e323e; font-size: 18px; text-align: right; padding-right: 10px;
 	}
 	.info_frame_line{
 		float: left; width: 600px; height: 1px; background:#e3e7e9;
@@ -217,12 +332,62 @@
 		margin-top: 20px;
 		text-align: center;
 	}
+	
+	#loading{
+	 		z-index: 10;
+	 		height:100px;
+			width:400px;
+			background:white;
+			border:1px #0068b7 solid;
+			display:none;
+			position:absolute;
+			margin-left:300px;
+			margin-top: 250px;
+			border-radius: 5px;
+			}
+	 #loading > p{color:#FFF}
+	 #output{
+		 width: 100%;
+		 height: 20px; line-height: 20px;
+		 text-align: center;
+		 color: #0068b7;
+		 font-size: 13px;
+		 margin-top: 30px;
+	 }
+	  #output2{
+		  width: 100%;
+		 height: 20px; line-height: 20px;
+		 text-align: center;
+		 color: #0068b7;
+		 font-size: 13px;
+	 }
+	 #background_layer
+	 {
+		 position:absolute;
+		 z-index: 9;
+		 width: 100%;
+		 height: 100%;
+		 background: #0068b7;
+		 opacity: 0.3;
+		 left: 0px;
+		 top: 0px;
+		 display:none;
+	 }
+
+
 </style>
 
 
 <body bgcolor="#f0f0f0">
 	
 	<div id="wrap">
+		
+		<div id="background_layer"></div>
+		<div id="loading" data-rel="popup" data-position-to="window">
+			
+			<div id="output">온라인 감정중...</div>
+			<div id="output2">공시지가,실거래가,에너지사용량 분석중</div>
+		</div>
 		
 		<div id='top_warp'>
 			<?php include_once $_SERVER["DOCUMENT_ROOT"]."/landbaksa/web_code/common_top.php"; ?>
@@ -239,14 +404,14 @@
 					
 					<div class="search_info_data_frame">
 						<div class="search_info_title">매매가</div>
-						<input type="text" id='sellprice' name="sellprice" class="search_info_input" placeholder="예:350,000,000">
+						<input type="text" id='sellprice' name="sellprice" class="search_info_input" onchange="getNumber(this);" onkeyup="getNumber(this);"  placeholder="예:350,000,000">
 						<div class="search_info_title">대출금</div>
-						<input type="text" id='bankprice' name="bankprice" class="search_info_input" placeholder="예:100,000,000">
+						<input type="text" id='bankprice' name="bankprice" class="search_info_input" onchange="getNumber(this);" onkeyup="getNumber(this);"placeholder="예:100,000,000">
 						<div class="info_frame_line"></div>
 						<div class="search_info_title">보증금</div>
-						<input type="text" id='depositprice' name="depositprice" class="search_info_input" placeholder="예:100,000,000">
+						<input type="text" id='depositprice' name="depositprice" class="search_info_input" onchange="getNumber(this);" onkeyup="getNumber(this);"placeholder="예:100,000,000">
 						<div class="search_info_title">월세</div>
-						<input type="text" id='monthprice' name="monthprice" class="search_info_input" placeholder="예:1,200,000">
+						<input type="text" id='monthprice' name="monthprice" class="search_info_input" onchange="getNumber(this);" onkeyup="getNumber(this);"placeholder="예:1,200,000">
 						
 					</div>
 					
