@@ -30,6 +30,7 @@
 	
 	$today = date('Ym');
 	
+	$apikey ='**';
 	$silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey.'&numOfRows=9999';
 	
 	$ch = curl_init();
