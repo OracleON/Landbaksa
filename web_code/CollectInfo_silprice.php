@@ -37,9 +37,16 @@
 	//http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=W3w3lbvP9c0%2FCEY0x%2Fib74UFOE3On6w%2BprL9Z1yw3GfwotJl8CvFWWpestfb4OvRabuVnoCRaAhrVqvXL4V%2B5w%3D%3D
 
 	//[start] 실거래가 API
-	$silprice_url = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey;
+	//http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D&format=json
+	
+	//요약url
+	//$silprice_url = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey;
+	//상세url
+	$silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey.'&numOfRows=9999';
+	
 	$ch = curl_init();
-	curl_setopt($ch,CURLOPT_URL,$silprice_url); //여기선 url을 변수로
+	
+	curl_setopt($ch,CURLOPT_URL,$silprice_url);
 	curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch,CURLOPT_NOSIGNAL, 1);
 	
@@ -47,21 +54,48 @@
 	curl_close($ch);
 	
 	$object = simplexml_load_string($data);
+// 	foreach($$object as $k => $v){
+// 	    $$object[$k] = trim($v);
+// 	}
 	$newobject = json_encode($object);
 	$object_json = json_decode($newobject,true);
 	
-	echo("totalCount=".$object_json['body']['totalCount']."</br>");
-	echo("body=".$object_json['body']."</br>");
-	echo("items=".$object_json['body']['items']."</br>");
-	echo("body=".$object_json['body']['items']['item'][0]."</br>");
-	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
+// 	echo($newobject);
 	
-// 	echo $newobject."</br>";;
+// 	echo("totalCount=".$object_json['body']['totalCount']."</br>");
+// 	echo("body=".$object_json['body']."</br>");
+// 	echo("items=".$object_json['body']['items']."</br>");
+// 	echo("body=".$object_json['body']['items']['item'][0]."</br>");
+// 	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
 	
 	$totalCount = $object_json['body']['totalCount'];
 	for($i=0; $i < $totalCount; $i++){
 	    $item = $object_json['body']['items']['item'][$i];
-	    echo $item['거래금액']."</br>";
+	    echo $item['거래금액']." ";
+	    echo $item['건축년도']." ";
+	    echo $item['년']." ";
+	    echo $item['도로명']." ";
+	    echo $item['도로명건물본번호코드']." ";
+	    echo $item['도로명건물부번호코드']." ";
+	    echo $item['도로명시군구코드']." ";
+	    echo $item['도로명일련번호코드']." ";
+	    echo $item['도로명지상지하코드']." ";
+	    echo $item['도로명코드']." ";
+	    echo $item['법정동']." ";
+	    echo $item['법정동본번코드']." ";
+	    echo $item['법정동부번코드']." ";
+	    echo $item['법정동시군구코드']." ";
+	    echo $item['법정동읍면동코드']." ";
+	    echo $item['법정동지번코드']." ";
+	    echo $item['아파트']." ";
+	    echo $item['월']." ";
+	    echo $item['일']." ";
+	    echo $item['일련번호']." ";
+	    echo $item['전용면적']." ";
+	    echo $item['지번']." ";
+	    echo $item['지역코드']." ";
+	    echo $item['층']." ";
+	    echo "</br>";
 	}
 	
 	// 	//[end] 실거래가 API
