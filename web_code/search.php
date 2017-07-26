@@ -73,7 +73,7 @@
 				$('#background_layer').fadeIn();
 				$('#loading').fadeIn();
 				
-				var getparams = {userid:tempuserid,law_code:lawcode,ji_bun:jibun,apartment_type:apartment};
+				var getparams = {userid:tempuserid,username:'<?echo $username?>',law_code:lawcode,ji_bun:jibun,apartment_type:apartment,search_type:'address',address:tempaddress};
 						//alert('getparams 준비.'+getparams);
 				$.getJSON("CollectInfo.php",getparams,function(data){	
 					$.each(data, function(key, value){
@@ -91,7 +91,7 @@
 												//$("#loding").popup("close");
 												//$('#loading').hide();
 												
-												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=address";
 												 }, 1000);
 								}
 								if(value == "no")
