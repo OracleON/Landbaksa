@@ -69,7 +69,7 @@
 	    $size = trim($item['전용면적']);
 	    $story = trim($item['층']);
 
-	    $insertsql = "INSERT INTO landbaksa_silprice_info SET amount='$amount',build_year='$build_year',year='$year',road_nm='$road_nm',law_location_nm='$law_location_nm',bun='$bun',ji='$ji',sigunguCd='$sigunguCd',bjdongCd='$bjdongCd',apartment_nm='$apartment_nm',month='$month',day='$day',silprice_seq='$silprice_seq',size='$size',story='$story'";
+	    $insertsql = "INSERT INTO landbaksa_silprice_info SET amount='$amount',build_year='$build_year',year='$year',road_nm='$road_nm',law_location_nm='$law_location_nm',bun='$t_bun',ji='$t_ji',sigunguCd='$t_sigunguCd',bjdongCd='$t_bjdongCd',apartment_nm='$apartment_nm',month='$month',day='$day',silprice_seq='$silprice_seq',size='$size',story='$story'";
 	    $temp = mysql_query($insertsql);
 	    
 // 	    echo $item['거래금액']." ";
