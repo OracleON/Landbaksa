@@ -56,7 +56,13 @@
 	echo("body=".$object_json['body']['items']['item'][0]."</br>");
 	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
 	
-	echo $newobject;
+	echo $newobject."</br>";;
+	
+	$totalCount = $object_json['body']['totalCount'];
+	for($i=0; $i < $totalCount; $i){
+	    $item = $object_json['body']['items']['item'][i];
+	    echo $item['거래금액']."</br>";
+	}
 	
 	// 	//[end] 실거래가 API
 // // 	$query = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=W3w3lbvP9c0%2FCEY0x%2Fib74UFOE3On6w%2BprL9Z1yw3GfwotJl8CvFWWpestfb4OvRabuVnoCRaAhrVqvXL4V%2B5w%3D%3D';
