@@ -13,20 +13,20 @@
 	$tempjibun = split('-', $jibun);
 	
 	//for test
-	$userid = "test10";
-	$sigunguCd = "11500"; 
-	$bjdongCd = "10800";
-	$bun = "1374"; 
-	$bun = substr($bun, -4,4);
-	$ji = "0000";
-	$ji = substr($ji, -4,4);
-
-// 	$sigunguCd = substr($lawcode, 0,5);
-// 	$bjdongCd = substr($lawcode, 5,9);
-// 	$bun = "0000".$tempjibun[0];
-// 	$bun = substr($bun, -4,4); 
-// 	$ji = "0000".$tempjibun[1];
+// 	$userid = "test10";
+// 	$sigunguCd = "11500"; 
+// 	$bjdongCd = "10800";
+// 	$bun = "1374"; 
+// 	$bun = substr($bun, -4,4);
+// 	$ji = "0000";
 // 	$ji = substr($ji, -4,4);
+
+	$sigunguCd = substr($lawcode, 0,5);
+	$bjdongCd = substr($lawcode, 5,9);
+	$bun = "0000".$tempjibun[0];
+	$bun = substr($bun, -4,4); 
+	$ji = "0000".$tempjibun[1];
+	$ji = substr($ji, -4,4);
 	
 	$this_month= date('Y').date('m');
 	for($deal_md="201601"; $deal_md < $this_month; $deal_md++){
@@ -34,7 +34,7 @@
 	        $deal_md=(substr($deal_md, 0, 4)+1)."01";
 	    }
 // 	    echo($deal_md)."</br>";
-	    $apikey ='**';
+	    $apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
 	    $silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD='.$deal_md.'&serviceKey='.$apikey.'&numOfRows=9999';
 	    
 	    $ch = curl_init();
