@@ -26,14 +26,15 @@
 	$today = date('Ym');
 
 /*변수 확인*/
-	echo $lawcode."/".$bun."/".$ji."/".$today;
+	echo $lawcode."/".$bun."/".$ji."/".$today.'<br/>';
 
 	$numOfRows = 10; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
     $stdrYear = 2012; // 데이터 조회 기준년도
     $landBookCode = 1; // 토지(임야)대장구분
+    $format = 'json'; // 응답데이터 형식 구분
 
 	// ====> 아파트 공시지가 API
-	$apart_url = $indvdHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear;
+	$apart_url = $indvdHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear.'&format='.$format;
 	
 	//$response = get($energy_query); 
 	$url = $apart_url;        //호출대상 URL
@@ -45,10 +46,14 @@
     //curl_setopt($ch,CURLOPT_POST, 1); //Method를 POST로 지정.. 이 라인이 아예 없으면 GET
     
     $data = curl_exec($ch);
+    $data = json_decode($data, true);
 
     curl_close($ch);
 
-    echo $data;
+    echo $data['indvdHousingPrices']['field'][0]['ldCodeNm'];
+//    var_dump($data['indvdHousingPrices']['field'][0]['ldCode']);
+//    var_dump($data->indvdHousingPrices);
+//    echo $data['indvdHousingPrices']['field'];
     /*$object = simplexml_load_string($data);
     $newobject = json_encode($object);
     $object_json = json_decode($newobject,true);
