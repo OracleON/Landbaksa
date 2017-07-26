@@ -59,7 +59,7 @@
 // 	}
 	$newobject = json_encode($object);
 	$object_json = json_decode($newobject,true);
-	
+	$result = $newobject;
 // 	echo($newobject);
 	
 // 	echo("totalCount=".$object_json['body']['totalCount']."</br>");
@@ -68,38 +68,59 @@
 // 	echo("body=".$object_json['body']['items']['item'][0]."</br>");
 // 	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
 
-	$insertsql = "INSERT INTO landbaksa_silprice SET userid='$userid',pwd='$pwd',username='$username',regdate=NOW()";
-	
-	$temp = mysql_query($insertsql);
 	
 	$totalCount = $object_json['body']['totalCount'];
+	
 	for($i=0; $i < $totalCount; $i++){
 	    $item = $object_json['body']['items']['item'][$i];
-	    echo $item['거래금액']." ";
-	    echo $item['건축년도']." ";
-	    echo $item['년']." ";
-	    echo $item['도로명']." ";
-	    echo $item['도로명건물본번호코드']." ";
-	    echo $item['도로명건물부번호코드']." ";
-	    echo $item['도로명시군구코드']." ";
-	    echo $item['도로명일련번호코드']." ";
-	    echo $item['도로명지상지하코드']." ";
-	    echo $item['도로명코드']." ";
-	    echo $item['법정동']." ";
-	    echo $item['법정동본번코드']." ";
-	    echo $item['법정동부번코드']." ";
-	    echo $item['법정동시군구코드']." ";
-	    echo $item['법정동읍면동코드']." ";
-	    echo $item['법정동지번코드']." ";
-	    echo $item['아파트']." ";
-	    echo $item['월']." ";
-	    echo $item['일']." ";
-	    echo $item['일련번호']." ";
-	    echo $item['전용면적']." ";
-	    echo $item['지번']." ";
-	    echo $item['지역코드']." ";
-	    echo $item['층']." ";
-	    echo "</br>";
+
+	    $amount = $item['거래금액'];
+	    echo $amount;
+	    
+	    $build_year = $item['건축년도'];
+	    $year = $item['년'];
+	    $road_nm = $item['도로명'];
+	    $law_location_nm = $item['법정동'];
+	    $t_bun = $item['법정동본번코드'];
+	    $t_ji = $item['법정동부번코드'];
+	    $t_sigunguCd = $item['법정동시군구코드'];
+	    $t_bjdongCd = $item['법정동읍면동코드'];
+	    $apartment_nm = $item['아파트'];
+	    $month = $item['월'];
+	    $day = $item['일'];
+	    $silprice_seq = $item['일련번호'];
+	    $size = $item['전용면적'];
+	    $story = $item['층'];
+
+	    $insertsql = "INSERT INTO landbaksa_silprice SET amount='$amount',build_year='$build_year',year='$year',road_nm='$road_nm',law_location_nm='$law_location_nm',bun='$bun',ji='$ji',sigunguCd='$sigunguCd',bjdongCd='$bjdongCd',apartment_nm='$apartment_nm',month='$month',day='$day',silprice_seq='$silprice_seq',size='$size',story='$story'";
+	    $temp = mysql_query($insertsql);
+	    
+	    echo $temp;
+// 	    echo $item['거래금액']." ";
+// 	    echo $item['건축년도']." ";
+// 	    echo $item['년']." ";
+// 	    echo $item['도로명']." ";
+// 	    echo $item['도로명건물본번호코드']." ";
+// 	    echo $item['도로명건물부번호코드']." ";
+// 	    echo $item['도로명시군구코드']." ";
+// 	    echo $item['도로명일련번호코드']." ";
+// 	    echo $item['도로명지상지하코드']." ";
+// 	    echo $item['도로명코드']." ";
+// 	    echo $item['법정동']." ";
+// 	    echo $item['법정동본번코드']." ";
+// 	    echo $item['법정동부번코드']." ";
+// 	    echo $item['법정동시군구코드']." ";
+// 	    echo $item['법정동읍면동코드']." ";
+// 	    echo $item['법정동지번코드']." ";
+// 	    echo $item['아파트']." ";
+// 	    echo $item['월']." ";
+// 	    echo $item['일']." ";
+// 	    echo $item['일련번호']." ";
+// 	    echo $item['전용면적']." ";
+// 	    echo $item['지번']." ";
+// 	    echo $item['지역코드']." ";
+// 	    echo $item['층']." ";
+// 	    echo "</br>";
 	}
 	
 	/*	
@@ -125,5 +146,5 @@
 	*/	
 	
 	
-// 	echo $result;
+	echo $result;
 ?>
