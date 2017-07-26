@@ -26,14 +26,14 @@
 	$today = date('Ym');
 
 /*변수 확인*/
-	echo $lawcode."/".$bun."/".$ji."/".$today."\n\n";
+	echo $lawcode."/".$bun."/".$ji."/".$today;
 
-	$numOfRows = 1000; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
+	$numOfRows = 10; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
     $stdrYear = 2012; // 데이터 조회 기준년도
     $landBookCode = 1; // 토지(임야)대장구분
 
 	// ====> 아파트 공시지가 API
-	$apart_url = $apartHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear;
+	$apart_url = $indvdHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear;
 	
 	//$response = get($energy_query); 
 	$url = $apart_url;        //호출대상 URL
