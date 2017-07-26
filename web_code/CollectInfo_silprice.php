@@ -6,8 +6,8 @@
 
 	$result = '{"signupJson":"no"}';
 	
-	
-	$userid = $_GET["userid"]; //ok
+	$userid = "test10";
+// 	$userid = $_GET["userid"]; //ok
 	$lawcode = $_GET["law_code"]; //ok
 	$jibun = $_GET["ji_bun"]; //ok
 	
@@ -31,9 +31,12 @@
 	$today = date('Ym');
 	
 	echo $sigunguCd."/".$bjdongCd."/".$bun."/".$ji."/".$today;
-	
+
 	$apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
-	
+
+	//
+	$query = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=W3w3lbvP9c0%2FCEY0x%2Fib74UFOE3On6w%2BprL9Z1yw3GfwotJl8CvFWWpestfb4OvRabuVnoCRaAhrVqvXL4V%2B5w%3D%3D';
+
 	// ====> 에너지 API
 	$energy_query ='http://apis.data.go.kr/1611000/BldEngyService/getBeElctyUsgInfo?serviceKey='.$apikey.'&numOfRows=10&pageSize=10&pageNo=1&startPage=1&sigunguCd='.$sigunguCd.'&bjdongCd='.$bjdongCd.'&bun='.$bun.'&ji='.$ji.'&useYm=201601';
 	
