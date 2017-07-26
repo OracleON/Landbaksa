@@ -6,42 +6,31 @@
 
 	$result = '{"signupJson":"no"}';
 	
-	$userid = "test10";
-// 	$userid = $_GET["userid"]; //ok
+ 	$userid = $_GET["userid"]; //ok
 	$lawcode = $_GET["law_code"]; //ok
 	$jibun = $_GET["ji_bun"]; //ok
 	
 	$tempjibun = split('-', $jibun);
 	
-	//sample code
-	$sigunguCd = "11500"; 
-	$bjdongCd = "10800";
-	$bun = "1374"; 
-	$bun = substr($bun, -4,4);
-	$ji = "0000";
-	$ji = substr($ji, -4,4);
-
-// 	$sigunguCd = substr($lawcode, 0,5); // 11500
-// 	$bjdongCd = substr($lawcode, 5,9); // 10800
-// 	$bun = "0000".$tempjibun[0]; // 1374
-// 	$bun = substr($bun, -4,4); 
-// 	$ji = "0000".$tempjibun[1]; // 0000
+// 	//for test
+// 	$userid = "test10";
+// 	$sigunguCd = "11500"; 
+// 	$bjdongCd = "10800";
+// 	$bun = "1374"; 
+// 	$bun = substr($bun, -4,4);
+// 	$ji = "0000";
 // 	$ji = substr($ji, -4,4);
+
+	$sigunguCd = substr($lawcode, 0,5);
+	$bjdongCd = substr($lawcode, 5,9);
+	$bun = "0000".$tempjibun[0];
+	$bun = substr($bun, -4,4); 
+	$ji = "0000".$tempjibun[1];
+	$ji = substr($ji, -4,4);
 	
 	$today = date('Ym');
 	
-// 	echo $sigunguCd."/".$bjdongCd."/".$bun."/".$ji."/".$today;
-
-	$apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
-
-	//http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=W3w3lbvP9c0%2FCEY0x%2Fib74UFOE3On6w%2BprL9Z1yw3GfwotJl8CvFWWpestfb4OvRabuVnoCRaAhrVqvXL4V%2B5w%3D%3D
-
-	//[start] 실거래가 API
-	//http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD=11110&DEAL_YMD=201512&serviceKey=sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D&format=json
-	
-	//요약url
-	//$silprice_url = 'http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTrade?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey;
-	//상세url
+	$apikey ='**';
 	$silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey.'&numOfRows=9999';
 	
 	$ch = curl_init();
@@ -54,76 +43,60 @@
 	curl_close($ch);
 	
 	$object = simplexml_load_string($data);
-// 	foreach($$object as $k => $v){
-// 	    $$object[$k] = trim($v);
-// 	}
 	$newobject = json_encode($object);
 	$object_json = json_decode($newobject,true);
-	
-// 	echo($newobject);
-	
-// 	echo("totalCount=".$object_json['body']['totalCount']."</br>");
-// 	echo("body=".$object_json['body']."</br>");
-// 	echo("items=".$object_json['body']['items']."</br>");
-// 	echo("body=".$object_json['body']['items']['item'][0]."</br>");
-// 	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
-
-	$insertsql = "INSERT INTO landbaksa_silprice SET userid='$userid',pwd='$pwd',username='$username',regdate=NOW()";
-	
-	$temp = mysql_query($insertsql);
+	$result = $newobject;
 	
 	$totalCount = $object_json['body']['totalCount'];
+	
 	for($i=0; $i < $totalCount; $i++){
 	    $item = $object_json['body']['items']['item'][$i];
-	    echo $item['거래금액']." ";
-	    echo $item['건축년도']." ";
-	    echo $item['년']." ";
-	    echo $item['도로명']." ";
-	    echo $item['도로명건물본번호코드']." ";
-	    echo $item['도로명건물부번호코드']." ";
-	    echo $item['도로명시군구코드']." ";
-	    echo $item['도로명일련번호코드']." ";
-	    echo $item['도로명지상지하코드']." ";
-	    echo $item['도로명코드']." ";
-	    echo $item['법정동']." ";
-	    echo $item['법정동본번코드']." ";
-	    echo $item['법정동부번코드']." ";
-	    echo $item['법정동시군구코드']." ";
-	    echo $item['법정동읍면동코드']." ";
-	    echo $item['법정동지번코드']." ";
-	    echo $item['아파트']." ";
-	    echo $item['월']." ";
-	    echo $item['일']." ";
-	    echo $item['일련번호']." ";
-	    echo $item['전용면적']." ";
-	    echo $item['지번']." ";
-	    echo $item['지역코드']." ";
-	    echo $item['층']." ";
-	    echo "</br>";
-	}
-	
-	/*	
-	$insertsql = "INSERT INTO landbaksa_user SET userid='$userid',pwd='$pwd',username='$username',regdate=NOW()";
 
-	$temp = mysql_query($insertsql);
-		
-	//////////////	
+	    $amount = trim($item['거래금액']);
+	    $build_year = trim($item['건축년도']);
+	    $year = trim($item['년']);
+	    $road_nm = trim($item['도로명']);
+	    $law_location_nm = trim($item['법정동']);
+	    $t_bun = trim($item['법정동본번코드']);
+	    $t_ji = trim($item['법정동부번코드']);
+	    $t_sigunguCd = trim($item['법정동시군구코드']);
+	    $t_bjdongCd = trim($item['법정동읍면동코드']);
+	    $apartment_nm = trim($item['아파트']);
+	    $month = trim($item['월']);
+	    $day = trim($item['일']);
+	    $silprice_seq = trim($item['일련번호']);
+	    $size = trim($item['전용면적']);
+	    $story = trim($item['층']);
 
-	if($temp)
-	{
-		
-		
-		$result ='{"signupJson":"insertok"';
-		$result .= ',"username":"'.$username.'"';
-		$result .='}';
-		
+	    $insertsql = "INSERT INTO landbaksa_silprice_info SET amount='$amount',build_year='$build_year',year='$year',road_nm='$road_nm',law_location_nm='$law_location_nm',bun='$t_bun',ji='$t_ji',sigunguCd='$t_sigunguCd',bjdongCd='$t_bjdongCd',apartment_nm='$apartment_nm',month='$month',day='$day',silprice_seq='$silprice_seq',size='$size',story='$story'";
+	    $temp = mysql_query($insertsql);
+	    
+// 	    echo $item['거래금액']." ";
+// 	    echo $item['건축년도']." ";
+// 	    echo $item['년']." ";
+// 	    echo $item['도로명']." ";
+// 	    echo $item['도로명건물본번호코드']." ";
+// 	    echo $item['도로명건물부번호코드']." ";
+// 	    echo $item['도로명시군구코드']." ";
+// 	    echo $item['도로명일련번호코드']." ";
+// 	    echo $item['도로명지상지하코드']." ";
+// 	    echo $item['도로명코드']." ";
+// 	    echo $item['법정동']." ";
+// 	    echo $item['법정동본번코드']." ";
+// 	    echo $item['법정동부번코드']." ";
+// 	    echo $item['법정동시군구코드']." ";
+// 	    echo $item['법정동읍면동코드']." ";
+// 	    echo $item['법정동지번코드']." ";
+// 	    echo $item['아파트']." ";
+// 	    echo $item['월']." ";
+// 	    echo $item['일']." ";
+// 	    echo $item['일련번호']." ";
+// 	    echo $item['전용면적']." ";
+// 	    echo $item['지번']." ";
+// 	    echo $item['지역코드']." ";
+// 	    echo $item['층']." ";
+// 	    echo "</br>";
 	}
-	else
-	{
-			$result ='{"signupJson":"no"}';
-	}
-	*/	
-	
-	
-// 	echo $result;
+
+	echo $result;
 ?>
