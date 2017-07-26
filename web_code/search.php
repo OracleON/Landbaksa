@@ -65,11 +65,76 @@
 				//alert(Array_address[0]+'/'+Array_address[1]+'/'+Array_address[2]);
 				
 				//alert('감정시작!!');
+				var tempuserid = '<?echo $userid?>';
 				var lawcode = $('#lawcode').val();
 				var jibun = $('#jibun').val();
 				var apartment = $('#apartment').val();
 				
-				location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+				$('#background_layer').fadeIn();
+				$('#loading').fadeIn();
+				
+				var getparams = {userid:tempuserid,law_code:lawcode,ji_bun:jibun,apartment_type:apartment};
+						//alert('getparams 준비.'+getparams);
+				$.getJSON("CollectInfo.php",getparams,function(data){	
+					$.each(data, function(key, value){
+							if(key == "signupJson")
+							{
+								if(value == "insertok")
+								{
+									changeok = "ok";
+									//alert('로그인 성공입니다.');
+									$('#output').empty().append('온라인 감정 성공 입니다.');
+									$('#output2').empty().append('분석결과 페이지로 이동합니다.');
+									
+									setTimeout(function(){
+												//$('#loading').fadeOut();
+												//$("#loding").popup("close");
+												//$('#loading').hide();
+												
+												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+												 }, 1000);
+								}
+								if(value == "no")
+								{
+									changeok = "not";	
+									$('#output2').empty().append('감정정보가 부족합니다.');
+									//$('#loading').hide();
+									setTimeout(function(){
+												alert('감정에 실패하였습니다..');
+												$('#background_layer').fadeOut();
+												$('#loading').fadeOut();
+												 }, 1000);
+									
+								}
+	
+								if(value == "error")
+								{
+									changeok = "not";
+									$('#output').append('DATA BASE ERROR!!!!.');
+									setTimeout(function(){
+												$('#loading').fadeOut();
+												$('#background_layer').fadeOut();
+												//$("#loding").popup("close");
+												//$('#loading').hide();
+												 }, 1000);
+								}
+								
+							}
+							
+					});
+					
+					if(changeok =="ok")
+					{
+						//location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+						
+					}else{
+						//alert('감정에 실패하였습니다..');
+						//$('#background_layer').fadeOut();
+						//$('#loading').fadeOut();
+					}	
+				});	
+				
+				
 			}
 			
 		});
@@ -92,8 +157,11 @@
                 var apart_type =''; //아파트여부
 				
 				apart_type = data.apartment;
-				bunji = data.jibunAddressEnglish.split(",");
+				//bunji = data.jibunAddressEnglish.split(",");
+				var tempbunji = data.jibunAddress.split(" ");
+				bunji = tempbunji[tempbunji.length-1];
 				
+				//alert(tempbunji[2]+tempbunji[3]);
 				bcode = data.bcode;
 				
                 // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
@@ -122,7 +190,7 @@
                 //document.getElementById('sample6_postcode').value = data.zonecode; //5자리 새우편번호 사용
                 document.getElementById('address').value = fullAddr;
                 document.getElementById('lawcode').value = bcode;
-                document.getElementById('jibun').value = bunji[0];
+                document.getElementById('jibun').value = bunji;
                 document.getElementById('apartment').value = apart_type;
                 
 
@@ -192,12 +260,61 @@
 	.hidden_input{
 		display: none;
 	}
+	
+	#loading{
+	 		z-index: 10;
+	 		height:100px;
+			width:400px;
+			background:white;
+			border:1px #0068b7 solid;
+			display:none;
+			position:absolute;
+			margin-left:300px;
+			margin-top: 250px;
+			border-radius: 5px;
+			}
+	 #loading > p{color:#FFF}
+	 #output{
+		 width: 100%;
+		 height: 20px; line-height: 20px;
+		 text-align: center;
+		 color: #0068b7;
+		 font-size: 13px;
+		 margin-top: 30px;
+	 }
+	  #output2{
+		  width: 100%;
+		 height: 20px; line-height: 20px;
+		 text-align: center;
+		 color: #0068b7;
+		 font-size: 13px;
+	 }
+	 #background_layer
+	 {
+		 position:absolute;
+		 z-index: 9;
+		 width: 100%;
+		 height: 100%;
+		 background: #0068b7;
+		 opacity: 0.3;
+		 left: 0px;
+		 top: 0px;
+		 display:none;
+	 }
+	 
 </style>
 
 
 <body bgcolor="#f0f0f0">
 	
 	<div id="wrap">
+		
+		<div id="background_layer"></div>
+		<div id="loading" data-rel="popup" data-position-to="window">
+			
+			<div id="output">온라인 감정중...</div>
+			<div id="output2">공시지가,실거래가,에너지사용량 분석중</div>
+		</div>
 		
 		<div id='top_warp'>
 			<?php include_once $_SERVER["DOCUMENT_ROOT"]."/landbaksa/web_code/common_top.php"; ?>
