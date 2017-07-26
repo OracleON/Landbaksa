@@ -6,32 +6,30 @@
 
 	$result = '{"signupJson":"no"}';
 	
-	$userid = "test10";
-// 	$userid = $_GET["userid"]; //ok
+ 	$userid = $_GET["userid"]; //ok
 	$lawcode = $_GET["law_code"]; //ok
 	$jibun = $_GET["ji_bun"]; //ok
 	
 	$tempjibun = split('-', $jibun);
 	
-	//sample code
-	$sigunguCd = "11500"; 
-	$bjdongCd = "10800";
-	$bun = "1374"; 
-	$bun = substr($bun, -4,4);
-	$ji = "0000";
-	$ji = substr($ji, -4,4);
-
-// 	$sigunguCd = substr($lawcode, 0,5);
-// 	$bjdongCd = substr($lawcode, 5,9);
-// 	$bun = "0000".$tempjibun[0];
-// 	$bun = substr($bun, -4,4); 
-// 	$ji = "0000".$tempjibun[1];
+// 	//for test
+// 	$userid = "test10";
+// 	$sigunguCd = "11500"; 
+// 	$bjdongCd = "10800";
+// 	$bun = "1374"; 
+// 	$bun = substr($bun, -4,4);
+// 	$ji = "0000";
 // 	$ji = substr($ji, -4,4);
+
+	$sigunguCd = substr($lawcode, 0,5);
+	$bjdongCd = substr($lawcode, 5,9);
+	$bun = "0000".$tempjibun[0];
+	$bun = substr($bun, -4,4); 
+	$ji = "0000".$tempjibun[1];
+	$ji = substr($ji, -4,4);
 	
 	$today = date('Ym');
 	
-	$apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
-
 	$silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD=201512&serviceKey='.$apikey.'&numOfRows=9999';
 	
 	$ch = curl_init();
