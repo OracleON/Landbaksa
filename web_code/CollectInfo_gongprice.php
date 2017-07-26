@@ -26,9 +26,9 @@
 	$today = date('Ym');
 
 /*변수 확인*/
-	echo $lawcode."/".$bun."/".$ji."/".$today;
+	echo $lawcode."/".$bun."/".$ji."/".$today."\n\n";
 
-	/*$numOfRows = 1000; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
+	$numOfRows = 1000; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
     $stdrYear = 2012; // 데이터 조회 기준년도
     $landBookCode = 1; // 토지(임야)대장구분
 
@@ -36,7 +36,7 @@
 	$apart_url = $apartHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear;
 	
 	//$response = get($energy_query); 
-	$url = $energy_query;        //호출대상 URL
+	$url = $apart_url;        //호출대상 URL
     $ch = curl_init(); //파라미터:url -선택사항
     
     curl_setopt($ch,CURLOPT_URL,$url); //여기선 url을 변수로
@@ -45,12 +45,11 @@
     //curl_setopt($ch,CURLOPT_POST, 1); //Method를 POST로 지정.. 이 라인이 아예 없으면 GET
     
     $data = curl_exec($ch);
-  
-    
+
     curl_close($ch);
-    
- 
-    $object = simplexml_load_string($data);
+
+    echo $data;
+    /*$object = simplexml_load_string($data);
     $newobject = json_encode($object);
     $object_json = json_decode($newobject,true);
     
@@ -59,8 +58,8 @@
 	echo("-----");
 	echo $object_json['header'];
 	echo("-----");
-	echo $object_json['body'][0];
-	*/
+	echo $object_json['body'][0];*/
+
 	
 	 //echo($data."==>".$object."//날짜:".$resultCode."/".$useQty."/".$useYm);
 	/*	
