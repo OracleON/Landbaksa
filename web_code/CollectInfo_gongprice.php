@@ -64,52 +64,54 @@
 
 
 /*아파트 공시지가 데이터 삽입*/
-// 데이터 요청
-$responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
+    // 데이터 요청
+    $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
+    echo '1. Apartment Housing Price<br/>';
 
-// 데이터 갯수 확인
-echo $responseData['apartHousingPrices']['totalCount'];
+    // 데이터 갯수 확인
+    echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
 
-// 모든 데이터 삽입 시작
-$totalCount = $responseData['apartHousingPrices']['totalCount'];
-for($i = 0; $i < $totalCount; $i++) {
-//        var_dump($responseData['apartHousingPrices']['field'][$i]);
-    // 단위 요소 데이터
-    $elem = $responseData['apartHousingPrices']['field'][$i];
+    // 모든 데이터 삽입 시작
+    $totalCount = $responseData['apartHousingPrices']['totalCount'];
+    for($i = 0; $i < $totalCount; $i++) {
+    //        var_dump($responseData['apartHousingPrices']['field'][$i]);
+        // 단위 요소 데이터
+        $elem = $responseData['apartHousingPrices']['field'][$i];
 
-    // 데이터 묶음. 16개
-    $pnu = $elem['pnu'];
-    $ldCode = $elem['ldCode'];
-    $ldCodeNm = $elem['ldCodeNm'];
-    $regstrSeCode = $elem['regstrSeCode'];
-    $regstrSeCodeNm = $elem['regstrSeCodeNm'];
-    $mnnmSlno = $elem['mnnmSlno'];
-    $stdrYear = $elem['stdrYear'];
-    $stdrMt = $elem['stdrMt'];
-    $aphusCode = $elem['aphusCode'];
-    $aphusSeCode = $elem['aphusSeCode'];
-    $aphusSeCodeNm = $elem['aphusSeCodeNm'];
-    $spclLandNm = $elem['spclLandNm'];
-    $aphusNm = $elem['aphusNm'];
-    $prvuseAr = $elem['prvuseAr'];
-    $pblntfPc = $elem['pblntfPc'];
-    $lastUpdtDt = $elem['lastUpdtDt'];
+        // 데이터 묶음. 16개
+        $pnu = $elem['pnu'];
+        $ldCode = $elem['ldCode'];
+        $ldCodeNm = $elem['ldCodeNm'];
+        $regstrSeCode = $elem['regstrSeCode'];
+        $regstrSeCodeNm = $elem['regstrSeCodeNm'];
+        $mnnmSlno = $elem['mnnmSlno'];
+        $stdrYear = $elem['stdrYear'];
+        $stdrMt = $elem['stdrMt'];
+        $aphusCode = $elem['aphusCode'];
+        $aphusSeCode = $elem['aphusSeCode'];
+        $aphusSeCodeNm = $elem['aphusSeCodeNm'];
+        $spclLandNm = $elem['spclLandNm'];
+        $aphusNm = $elem['aphusNm'];
+        $prvuseAr = $elem['prvuseAr'];
+        $pblntfPc = $elem['pblntfPc'];
+        $lastUpdtDt = $elem['lastUpdtDt'];
 
-    // 삽입 쿼리 실행
-    $insertsql = "INSERT INTO  landbaksa_gongprice_apart_info SET pnu='$pnu', ldCode='$ldCode', ldCodeNm='$ldCodeNm', regstrSeCode='$regstrSeCode', regstrSeCodeNm='$regstrSeCodeNm', mnnmSlno='$mnnmSlno', stdrYear='$stdrYear', stdrMt='$stdrMt', aphusCode='$aphusCode', aphusSeCode='$aphusSeCode', aphusSeCodeNm='$aphusSeCodeNm', spclLandNm='$spclLandNm', aphusNm='$aphusNm', prvuseAr='$prvuseAr', pblntfPc='$pblntfPc', lastUpdtDt='$lastUpdtDt'";
-    $temp = mysql_query($insertsql);
-}
+        // 삽입 쿼리 실행
+        $insertsql = "INSERT INTO  landbaksa_gongprice_apart_info SET pnu='$pnu', ldCode='$ldCode', ldCodeNm='$ldCodeNm', regstrSeCode='$regstrSeCode', regstrSeCodeNm='$regstrSeCodeNm', mnnmSlno='$mnnmSlno', stdrYear='$stdrYear', stdrMt='$stdrMt', aphusCode='$aphusCode', aphusSeCode='$aphusSeCode', aphusSeCodeNm='$aphusSeCodeNm', spclLandNm='$spclLandNm', aphusNm='$aphusNm', prvuseAr='$prvuseAr', pblntfPc='$pblntfPc', lastUpdtDt='$lastUpdtDt'";
+        $temp = mysql_query($insertsql);
+    }
 
-// 만에 하나 있을 데이터 요청 오류에 대비한 카운트 초기화
-$totalCount = 0;
+    // 만에 하나 있을 데이터 요청 오류에 대비한 카운트 초기화
+    $totalCount = 0;
 
 
 /*건물 공시지가 데이터 삽입*/
     // 데이터 요청
     $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji);
+    echo '2. Building Housing Price<br/>';
 
     // 데이터 갯수 확인
-    echo $responseData['indvdHousingPrices']['totalCount'];
+    echo 'totalCount: '.$responseData['indvdHousingPrices']['totalCount'].'<br/>';
 
     // 모든 데이터 삽입 시작
     $totalCount = $responseData['indvdHousingPrices']['totalCount'];
@@ -146,4 +148,39 @@ $totalCount = 0;
     $totalCount = 0;
 
 
+/*토지 공시지가 데이터 삽입*/
+    // 데이터 요청
+    $responseData = getRequestData($indvdLandPriceURL, $lawcode, $bun, $ji);
+    echo '3. Land Housing Price<br/>';
+
+    // 데이터 갯수 확인
+    echo 'totalCount: '.$responseData['indvdLandPrices']['totalCount'].'<br/>';
+
+    // 모든 데이터 삽입 시작
+    $totalCount = $responseData['indvdLandPrices']['totalCount'];
+    for($i = 0; $i < $totalCount; $i++) {
+    //        var_dump($responseData['indvdLandPrices']['field'][$i]);
+        // 단위 요소 데이터
+        $elem = $responseData['indvdLandPrices']['field'][$i];
+
+        // 데이터 묶음. 12개
+        $pnu = $elem['pnu'];
+        $ldCode = $elem['ldCode'];
+        $ldCodeNm = $elem['ldCodeNm'];
+        $regstrSeCode = $elem['regstrSeCode'];
+        $regstrSeCodeNm = $elem['regstrSeCodeNm'];
+        $mnnmSlno = $elem['mnnmSlno'];
+        $stdrYear = $elem['stdrYear'];
+        $stdrMt = $elem['stdrMt'];
+        $pblntfPclnd = $elem['pblntfPclnd'];
+        $pblntfDe = $elem['pblntfDe'];
+        $stdLandAt = $elem['stdLandAt'];
+        $lastUpdtDt = $elem['lastUpdtDt'];
+
+        // 삽입 쿼리 실행
+        $insertsql = "INSERT INTO landbaksa_gongprice_land_info SET pnu='$pnu', ldCode='$ldCode', ldCodeNm='$ldCodeNm', regstrSeCode='$regstrSeCode', regstrSeCodeNm='$regstrSeCodeNm', mnnmSlno='$mnnmSlno', stdrYear='$stdrYear', stdrMt='$stdrMt', pblntfPclnd='$pblntfPclnd', pblntfDe='$pblntfDe', stdLandAt='$stdLandAt', lastUpdtDt='$lastUpdtDt'";
+        $temp = mysql_query($insertsql);
+    }
+
+    echo 'Done!';
 ?>
