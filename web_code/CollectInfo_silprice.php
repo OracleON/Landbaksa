@@ -56,11 +56,11 @@
 	echo("body=".$object_json['body']['items']['item'][0]."</br>");
 	echo("body마지막=".$object_json['body']['items']['item'][0]['거래금액']."</br>");
 	
-	echo $newobject."</br>";;
+// 	echo $newobject."</br>";;
 	
 	$totalCount = $object_json['body']['totalCount'];
-	for($i=0; $i < $totalCount; $i){
-	    $item = $object_json['body']['items']['item'][i];
+	for($i=0; $i < $totalCount; $i++){
+	    $item = $object_json['body']['items']['item'][$i];
 	    echo $item['거래금액']."</br>";
 	}
 	
