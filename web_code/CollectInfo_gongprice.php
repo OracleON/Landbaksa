@@ -1,30 +1,39 @@
 <?php
 	include $_SERVER["DOCUMENT_ROOT"]."/landbaksa/database/inc_dbconnect.php";
 	
-	$result = '{"signupJson":"no"}';
+//	$result = '{"signupJson":"no"}';
 	
-	
+/*공통으로 사용되는 전역 변수 선언*/
+    $apikey = 'sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
+
+    $apartHousingPriceURL = 'http://apis.data.go.kr/1611000/nsdi/ApartHousingPriceService/attr/getApartHousingPriceAttr?ServiceKey='.$apikey;
+    $indvdHousingPriceURL = 'http://apis.data.go.kr/1611000/nsdi/IndvdHousingPriceService/attr/getIndvdHousingPriceAttr?ServiceKey='.$apikey;
+    $indvdLandPriceURL = 'http://apis.data.go.kr/1611000/nsdi/IndvdLandPriceService/attr/getIndvdLandPriceAttr?ServiceKey='.$apikey;
+
 	$userid = $_GET["userid"]; //ok
 	$lawcode = $_GET["law_code"]; //ok
 	$jibun = $_GET["ji_bun"]; //ok
 	
 	$tempjibun = split('-', $jibun);
 	
-	$sigunguCd = substr($lawcode, 0,5);
-	$bjdongCd = substr($lawcode, 5,9);
+//	$sigunguCd = substr($lawcode, 0,5);
+//	$bjdongCd = substr($lawcode, 5,9);
 	$bun = "0000".$tempjibun[0];
 	$bun = substr($bun, -4,4);
 	$ji = "0000".$tempjibun[1];
 	$ji = substr($ji, -4,4);
 	
 	$today = date('Ym');
-	
-	echo $sigunguCd."/".$bjdongCd."/".$bun."/".$ji."/".$today;
-	
-	$apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
-	
-	// ====> 에너지 API
-	$energy_query ='http://apis.data.go.kr/1611000/BldEngyService/getBeElctyUsgInfo?serviceKey='.$apikey.'&numOfRows=10&pageSize=10&pageNo=1&startPage=1&sigunguCd='.$sigunguCd.'&bjdongCd='.$bjdongCd.'&bun='.$bun.'&ji='.$ji.'&useYm=201601';
+
+/*변수 확인*/
+	echo $lawcode."/".$bun."/".$ji."/".$today;
+
+	/*$numOfRows = 1000; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
+    $stdrYear = 2012; // 데이터 조회 기준년도
+    $landBookCode = 1; // 토지(임야)대장구분
+
+	// ====> 아파트 공시지가 API
+	$apart_url = $apartHousingPriceURL.'&pnu='.$lawcode.$landBookCode.$bun.$ji.'&numOfRows='.$numOfRows.'&pageNo=1&stdrYear='.$stdrYear;
 	
 	//$response = get($energy_query); 
 	$url = $energy_query;        //호출대상 URL
@@ -51,7 +60,7 @@
 	echo $object_json['header'];
 	echo("-----");
 	echo $object_json['body'][0];
-	
+	*/
 	
 	 //echo($data."==>".$object."//날짜:".$resultCode."/".$useQty."/".$useYm);
 	/*	
@@ -77,5 +86,5 @@
 	*/	
 	
 	
-	echo $result;
+//	echo $result;
 ?>
