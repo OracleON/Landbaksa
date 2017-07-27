@@ -28,14 +28,16 @@
 	$ji = "0000".$tempjibun[1];
 	$ji = substr($ji, -4,4);
 	
-	$this_month= date('Y').date('m');
-	for($deal_md="201601"; $deal_md < $this_month; $deal_md++){
-	    if(substr($deal_md,-2)>"12"){
-	        $deal_md=(substr($deal_md, 0, 4)+1)."01";
+	$this_month = date('Y').date('m');
+	$start_month = "201709";
+// 	$start_month = "201601";
+	for($deal_ym = $start_month; $deal_ym <= $this_month; $deal_ym++){
+	    if(substr($deal_ym,-2) > "12"){
+	        $deal_ym=(substr($deal_ym, 0, 4)+1)."01";
 	    }
-// 	    echo($deal_md)."</br>";
+// 	    echo($deal_ym)."</br>";
 	    $apikey ='sGT%2FVONLJV4Uj5UsA4AM9rLhFVEF2BGSGTvprzLt5jJtkQuuzSvAWchBH5y5v4s0tADgb%2Fjl%2BTZO2Tklz2zjSg%3D%3D';
-	    $silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD='.$deal_md.'&serviceKey='.$apikey.'&numOfRows=9999';
+	    $silprice_url = 'http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?LAWD_CD='.$sigunguCd.'&DEAL_YMD='.$deal_ym.'&serviceKey='.$apikey.'&numOfRows=9999';
 	    
 	    $ch = curl_init();
 	    
@@ -77,30 +79,4 @@
 	        $temp = mysql_query($insertsql);
     	}
 	}
-	    
-// 	    echo $item['거래금액']." ";
-// 	    echo $item['건축년도']." ";
-// 	    echo $item['년']." ";
-// 	    echo $item['도로명']." ";
-// 	    echo $item['도로명건물본번호코드']." ";
-// 	    echo $item['도로명건물부번호코드']." ";
-// 	    echo $item['도로명시군구코드']." ";
-// 	    echo $item['도로명일련번호코드']." ";
-// 	    echo $item['도로명지상지하코드']." ";
-// 	    echo $item['도로명코드']." ";
-// 	    echo $item['법정동']." ";
-// 	    echo $item['법정동본번코드']." ";
-// 	    echo $item['법정동부번코드']." ";
-// 	    echo $item['법정동시군구코드']." ";
-// 	    echo $item['법정동읍면동코드']." ";
-// 	    echo $item['법정동지번코드']." ";
-// 	    echo $item['아파트']." ";
-// 	    echo $item['월']." ";
-// 	    echo $item['일']." ";
-// 	    echo $item['일련번호']." ";
-// 	    echo $item['전용면적']." ";
-// 	    echo $item['지번']." ";
-// 	    echo $item['지역코드']." ";
-// 	    echo $item['층']." ";
-// 	    echo "</br>";
 ?>
