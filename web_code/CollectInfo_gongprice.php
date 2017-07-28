@@ -63,8 +63,15 @@
     }
 
 
+    $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji);
+    echo 'totalCount: '.$responseData['indvdHousingPrices']['totalCount'].'<br/>';
+
+    foreach ($responseData['indvdHousingPrices']['field'] as $column => $value) {
+        echo $column.': '.$value.'<br/>';
+    }
+
 /*아파트 공시지가 데이터 삽입*/
-    // 데이터 요청
+    /*// 데이터 요청
     $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
     echo '1. Apartment Housing Price<br/>';
 
@@ -102,11 +109,11 @@
     }
 
     // 만에 하나 있을 데이터 요청 오류에 대비한 카운트 초기화
-    $totalCount = 0;
+    $totalCount = 0;*/
 
 
 /*건물 공시지가 데이터 삽입*/
-    // 데이터 요청
+    /*// 데이터 요청
     $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji);
     echo '2. Building Housing Price<br/>';
 
@@ -145,11 +152,11 @@
     }
 
     // 만에 하나 있을 데이터 요청 오류에 대비한 카운트 초기화
-    $totalCount = 0;
+    $totalCount = 0;*/
 
 
 /*토지 공시지가 데이터 삽입*/
-    // 데이터 요청
+    /*// 데이터 요청
     $responseData = getRequestData($indvdLandPriceURL, $lawcode, $bun, $ji);
     echo '3. Land Housing Price<br/>';
 
@@ -180,7 +187,7 @@
         // 삽입 쿼리 실행
         $insertsql = "INSERT INTO landbaksa_gongprice_land_info SET pnu='$pnu', ldCode='$ldCode', ldCodeNm='$ldCodeNm', regstrSeCode='$regstrSeCode', regstrSeCodeNm='$regstrSeCodeNm', mnnmSlno='$mnnmSlno', stdrYear='$stdrYear', stdrMt='$stdrMt', pblntfPclnd='$pblntfPclnd', pblntfDe='$pblntfDe', stdLandAt='$stdLandAt', lastUpdtDt='$lastUpdtDt'";
         $temp = mysql_query($insertsql);
-    }
+    }*/
 
     echo 'Done!';
 ?>
