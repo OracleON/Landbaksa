@@ -63,12 +63,36 @@
     }
 
 
-    $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji);
-    echo 'totalCount: '.$responseData['indvdHousingPrices']['totalCount'].'<br/>';
+/*데이터 삽입 함수 정의*/
+    function insertData($tableName, $dataArray) {
+        // Key,Value들로 구성된 배열의 요소를 하나씩 읽어가며 주어진 테이블에 레코드를 삽입
+        foreach ($dataArray as $elem) {
+            // Key, Value 쌍들을 컬럼이름과 그것의 값으로 저장하기 위한 배열 선언
+            $cols = array();
+            $vals = array();
+            foreach ($elem as $key => $value) {
+                $cols[] = $key;
+                $vals[] = mysql_real_escape_string($value); // SQL 인젝션을 방지하기 위한 함수
+            }
 
-    foreach ($responseData['indvdHousingPrices']['field'] as $column => $value) {
-        echo $column.': '.$value.'<br/>';
+            // 컬럼이름과 그것의 값들을 콤마로 구분하여 하나의 문자열로 생성
+            $colNames = "`".implode("`, `", $cols)."`";
+            $colVals = "'".implode("', '", $vals)."'";
+
+            // 삽입 쿼리 실행
+            $insertSql = "INSERT INTO $tableName ($colNames) VALUES ($colVals)";
+            $temp = mysql_query($insertSql);
+
+            // 사용한 배열 해제
+            unset($cols, $vals);
+        }
     }
+
+    $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
+    echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
+
+    insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field']);
+
 
 /*아파트 공시지가 데이터 삽입*/
     /*// 데이터 요청
