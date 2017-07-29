@@ -31,6 +31,12 @@
 
 
 /*요청 생성 함수 정의*/
+/*
+ * $baseURL: 데이터 요청을 위한 기본 URL
+ * $lawCode: 10자리 법정동코드
+ * $mainAddr: 4자리 본번
+ * $subAddr: 4자리 부번
+ * */
     function getRequestData($baseURL, $lawCode, $mainAddr, $subAddr) {
         $numOfRows = 9999; // 한번에 가져올 데이터 수. 응답데이터의 totalCount에 따라 늘려야함
         $stdrYear = 2012; // 데이터 조회 기준년도
@@ -64,6 +70,10 @@
 
 
 /*레코드 중복 확인 함수 정의*/
+/*
+ * $tableName: 레코드 중복을 확인할 테이블 이름
+ * $conditionData: 중복을 확인에 기준으로 사용될 컬럼 데이터들. Key와 Value로 구성
+ * */
     function containsRecord($tableName, $conditionData) {
         // 쿼리의 검색조건절에 사용할 문자열 선언
         $whereCondition = "";
@@ -87,6 +97,11 @@
 
 
 /*데이터 삽입 함수 정의*/
+/*
+ * $tableName: 데이터를 삽입할 테이블 이름
+ * $dataArray: 삽입할 데이터들의 배열. 배열에서 요소 1개는 Key와 Value로 이루어진 데이터들의 집합
+ * $dupRules: 데이터 중복을 확인할 기준이 되는 컬럼 이름들. 데이터를 삽입하기전 중복된 데이터가 이미 데이터베이스에 있는지 확인하는데 사용
+ * */
     function insertData($tableName, $dataArray, $dupRules) {
         // Key,Value들로 구성된 배열의 요소를 하나씩 읽어가며 주어진 테이블에 레코드를 삽입
         // 레코드를 삽입하기 전에 중복된 데이터가 있는지 확인함
@@ -129,9 +144,15 @@
         }
     }
 
+/*아파트 공시지가 데이터 삽입*/
+    // 데이터 요청
     $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
+    echo '1. Apartment Housing Price<br/>';
+
+    // 데이터 갯수 확인
     echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
 
+    // 데이터 삽입
     insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
 
 
