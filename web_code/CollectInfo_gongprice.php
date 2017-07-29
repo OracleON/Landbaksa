@@ -63,10 +63,42 @@
     }
 
 
+/*레코드 중복 확인 함수 정의*/
+    function containsRecord($tableName, $conditionData) {
+        // 쿼리의 검색조건절에 사용할 문자열 선언
+        $whereCondition = "";
+
+        // 조건절 생성
+        foreach ($conditionData as $key => $value) {
+            // 조건절에 조건이 하나라도 채워져 있으면 AND 구문을 추가
+            if($whereCondition !== "")
+                $whereCondition .= " AND ";
+            $filteredVal = mysql_real_escape_string($value); // SQL 인젝션을 방지하기 위한 함수
+            $whereCondition .= $key."="."'$filteredVal'";
+        }
+
+        echo 'where Condition: '.$whereCondition.'</br>';
+    }
+
+
 /*데이터 삽입 함수 정의*/
-    function insertData($tableName, $dataArray) {
+    function insertData($tableName, $dataArray, $dupRules) {
         // Key,Value들로 구성된 배열의 요소를 하나씩 읽어가며 주어진 테이블에 레코드를 삽입
+        // 레코드를 삽입하기 전에 중복된 데이터가 있는지 확인함
         foreach ($dataArray as $elem) {
+            // 중복된 데이터를 검색하기 위한 기준데이터 배열 선언
+            $dupCriteria = array();
+
+            // 중복된 데이터를 검색하기 위한 데이터를 얻어옴
+            foreach ($dupRules as $rule) {
+                if(array_key_exists($rule, $elem)) {
+                    $dupCriteria[$rule] = $elem[$rule];
+                }
+            }
+
+            // 중복 체크함수 호출
+            containsRecord($tableName, $dupCriteria);
+
             // Key, Value 쌍들을 컬럼이름과 그것의 값으로 저장하기 위한 배열 선언
             $cols = array();
             $vals = array();
@@ -91,7 +123,7 @@
     $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji);
     echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
 
-    insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field']);
+    insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
 
 
 /*아파트 공시지가 데이터 삽입*/
