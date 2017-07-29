@@ -77,7 +77,12 @@
             $whereCondition .= $key."="."'$filteredVal'";
         }
 
-        echo 'where Condition: '.$whereCondition.'</br>';
+        // 검색 실행
+        $selectTarget = 'pnu';
+        $preSql = mysql_query("SELECT $selectTarget FROM $tableName WHERE $whereCondition");
+        $preCount = mysql_num_rows($preSql);
+
+        return $preCount;
     }
 
 
@@ -96,8 +101,12 @@
                 }
             }
 
-            // 중복 체크함수 호출
-            containsRecord($tableName, $dupCriteria);
+            // 중복된 데이터가 있는지 검색
+            $dupRecordCount = containsRecord($tableName, $dupCriteria);
+
+            // 중복된 데이터가 1개라도 있으면 스킵
+            if($dupRecordCount > 0)
+                continue;
 
             // Key, Value 쌍들을 컬럼이름과 그것의 값으로 저장하기 위한 배열 선언
             $cols = array();
