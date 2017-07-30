@@ -189,6 +189,7 @@
     $result = array();
     $yearToIndex = array("2012" => 0, "2013" => 1, "2014" => 2, "2015" => 3, "2016" => 4);
     $result['기준년도'] = array("2012", "2013", "2014", "2015", "2016");
+    $result['데이터'] = array();
 
     // 아파트 공시지가
     $queryResrc = mysql_query("SELECT DISTINCT prvuseAr FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu");
@@ -203,7 +204,7 @@
             while ($row = mysql_fetch_assoc($queryResrc)) {
                 $apartResult[$yearToIndex[$row['stdrYear']]] = $row['AVG(pblntfPc)'];
             }
-            $result['아파트 - '.$prvuseAr] = $apartResult;
+            $result['데이터']['아파트 - '.$prvuseAr] = $apartResult;
         }
     }
 
@@ -214,7 +215,7 @@
         while ($row = mysql_fetch_assoc($queryResrc)) {
             $buildingResult[$yearToIndex[$row['stdrYear']]] = $row['housePc'];
         }
-        $result['건물'] = $buildingResult;
+        $result['데이터']['건물'] = $buildingResult;
     }
 
     // 토지 공시지가
@@ -224,7 +225,7 @@
         while ($row = mysql_fetch_assoc($queryResrc)) {
             $landResult[$yearToIndex[$row['stdrYear']]] = $row['pblntfPclnd'];
         }
-        $result['토지'] = $landResult;
+        $result['데이터']['토지'] = $landResult;
     }
 
 //    print_r($result);
