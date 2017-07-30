@@ -5,16 +5,84 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="echarts.english.js/echarts-all-english-v2.js"></script>
+    <script type="text/javascript" src="echarts.english.js/green.js"></script>
 
 </head>
 
 <?
-	$cate =$_GET["cate"];
-	$address=$_GET["address"];
+	$userid = $_COOKIE["userid"];
+	$username = $_COOKIE["username"];
 	
-	$address_new = str_replace(',',' ',$address);
+	$cate =$_GET["cate"];
+	$apartment=$_GET["apartment"];
+	
+	/*
+	$address=$_GET["address"];
+	$lawcode=$_GET["lawcode"];
+	$jibun=$_GET["jibun"];
+	$searchtype = $_GET["searchtype"];
+	*/
+	$historyseq = $_GET["history_seq"];
+	
+	
 	//echo($address_new);
 	//echo($cate);
+	$search_history = mysql_query("SELECT * FROM landbaksa_search_history WHERE userid='$userid' AND seq = '$historyseq'");
+	$search_row = mysql_fetch_array($search_history);
+	
+	//모든 검색은 검색테이블에 먼저 넣고 테이블에서 가져오는방법으로 변경
+	$address=$search_row["address"];
+	$lawcode=$search_row["law_code"];
+	$jibun=$search_row["jibun_code"];
+	$searchtype = $search_row["type"];
+	
+	
+	$sigunguCd = substr($lawcode, 0,5);
+	$bjdongCd = substr($lawcode, 5,9);
+	$jibunArray = split("-", $jibun);
+	$bun = "0000".$jibunArray[0];
+	$bun = substr($bun, -4,4);
+	$ji = "0000".$jibunArray[1];
+	$ji = substr($ji, -4,4);
+	
+	$address_new = str_replace(',',' ',$address);
+	
+	$search_history_detail = mysql_query("SELECT * FROM landbaksa_infosearch_history WHERE history_seq = '$search_row[seq]'");
+	$detail_row = mysql_fetch_array($search_history_detail);
+	
+	$result_price = $detail_row["result_price"]; //감정가
+	$sell_price = $detail_row["sell_price"]; //매매가
+	$bank_price = $detail_row["bank_price"]; //대출금
+	$deposit_price = $detail_row["deposit_price"]; //보증금
+	$month_price = $detail_row["month_price"]; //월세
+	$need_price = $detail_row["need_price"]; //필요자본
+	$profit = $detail_row["profit"]; //수익율
+	$income_tax = $detail_row["income_tax"]; //양도소득세
+	$get_tax = $detail_row["get_tax"]; //취득세
+	$fee = $detail_row["fee"]; //부동산수수료
+	$rent_income_tax = $detail_row["rent_income_tax"]; //임대사업자소득세
+	
+	$sil_price = $search_row["sil_price"]; //실 거래가
+	$gong_price = $search_row["gong_price"]; // 공시지가
+	
+	
+	$fore_profit ='2.1';
+	
+	if($need_price == '0')
+	{
+		$predict_money1 ='0'; //4% 수익률일때 월세 3억 : 100 % = x : 4
+		$predict_money2 ='0'; //5% 수익률일때 월세
+		$predict_money3 ='0'; //6% 수익률일때 월세
+		$predict_money4 ='0'; //7% 수익률일때 월세
+	}else
+	{
+		$predict_money1 = ($need_price * 4 / 100)/12; //4% 수익률일때 월세 3억 : 100 % = x : 4
+		$predict_money2 =($need_price * 5 / 100)/12; //5% 수익률일때 월세
+		$predict_money3 =($need_price * 6 / 100)/12; //6% 수익률일때 월세
+		$predict_money4 =($need_price * 7 / 100)/12; //7% 수익률일때 월세
+	}
+	
 ?>
 
 <script>
@@ -32,6 +100,42 @@
 		$('#address_info_frame').html(address);
 		
 	});
+	
+	Number.prototype.format = function(){
+	    if(this==0) return 0;
+	 
+	    var reg = /(^[+-]?\d+)(\d{3})/;
+	    var n = (this + '');
+	 
+	    while (reg.test(n)) n = n.replace(reg, '$1' + ',' + '$2');
+	 
+	    return n;
+	};
+	
+	function changelike()
+	{
+		  	
+		$.ajax({
+              type: "POST",
+              url: "insertLike.php",
+              data: ({search_seq: '<?echo $historyseq?>'}),
+              cache: false,
+              dataType: "json",
+              success:function(msg) 
+			  {
+				   if(msg.signupJson == 'y')
+				   {
+				   	    $('#like_bt').attr('src','/landbaksa/images/star_bt.png');
+				   }else
+				   {
+					   $('#like_bt').attr('src','/landbaksa/images/star2_bt.png');
+				   }
+				   
+			  }
+			
+           });
+	}
+	
 </script>
 
 
@@ -62,8 +166,9 @@
 	#sellprice{float: left; width: auto; height: 60px; line-height: 60px; text-align: center; color: #0068b7; font-size: 21px; font-weight: 700;}
 	#sellprice_frame_title2{float: left; width: 30px; height: 60px; line-height: 60px; color: #2e323e; font-style: 15px;
 	}
+	#sellprice_line{float: left; width: 1px; height: 60px; background:#e3e7e9; margin-left: 30px; }
 	
-	#basic_info_frame{float: left; width: 900px; height: 152px;border: 1px solid #e3e7e9; margin-top: 20px; background: white; margin-bottom: 20px;}
+	#basic_info_frame{float: left; width: 900px; height: 153px;border: 1px solid #e3e7e9; margin-top: 20px; background: white; margin-bottom: 20px;}
 	.info_frame_line{float: left; width: 900px; height: 1px; background:#e3e7e9; }
 	.basic_info_frame_title{float: left; width: 129px; height: 50px; line-height: 50px; color: #6a6e79; background: #f7f7f7; text-align: left; font-size: 15px; padding-left: 20px; border-right: 1px solid #e3e7e9;}
 	.basic_info_frame_content{float: left; width: 280px; height: 50px; line-height: 50px; background: white; color: #2e323e; font-size: 18px; text-align: left; padding-left: 20px;}
@@ -86,6 +191,31 @@
 	
 	#energy_state_frame{float: left; width: 900px; height: 400px; margin-top: 20px;}
 	#energy_state_graph{float: left; width: 100%; height: 350px; border: 1px solid #e3e7e9; background: white;}
+	
+	
+	#sil_price_frame{float: left; width: 900px; height: 280px; min-height: 100px; margin-top: 20px;}
+	#sil_price_info_frame{float: left; width: 900px; height: 200px;border: 1px solid #e3e7e9; background: white;}
+	
+	#gong_price_frame{float: left; width: 900px; height: auto; min-height: 100px; margin-top: 20px;}
+	#gong_price_info_frame{float: left; width: 900px; height: auto; min-height: 150px; border: 1px solid #e3e7e9; background: white;}
+	
+	#sil_price_info_fram_title{float: left; width: 900px; height: 40px; line-height: 40px; border-bottom: 1px solid #e3e7e9;}
+	.sil_price_size{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.sil_price_story{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.sil_price_amount{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.sil_price_regdate{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.sil_price_apart_name{float: left; width: 300px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	
+	.sil_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto;}
+	.sel_price_info_frame{float: left; width: 900px; height: 40px; line-height: 40px; border-bottom: 1px solid #e3e7e9;}
+	.sil_price_size2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.sil_price_story2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.sil_price_amount2{float: left; width: 190px; height: 40px; line-height: 40px;text-align:right; font-size: 13px; color: #2e343e;}
+	.sil_price_regdate2{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.sil_price_apart_name2{float: left; width: 300px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	
+	#gong_price_info_fram_title{float: left; width: 900px; height: 40px; line-height: 40px; border-bottom: 1px solid #e3e7e9;}
+	.gong_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto;}
 </style>
 
 
@@ -109,7 +239,7 @@
 				var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 				    mapOption = {
 				        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-				        level: 1 // 지도의 확대 레벨
+				        level: 2 // 지도의 확대 레벨
 				    };  
 				
 				// 지도를 생성합니다    
@@ -146,66 +276,172 @@
 				<!-- 주소와 즐겨찾기 -->
 				<div id="like_frame">
 					<div id="like_frame_1">
-						<div id="address_title"><?echo $address_new?></div>
+						<div id="address_title"><?echo $address?></div>
 						<div id="like_frame_bt">
-							<img src="/landbaksa/images/star_bt.png" id="like_bt">
+							<?
+								if($search_row['like_yn'] == 'y')
+								{
+									echo '<a href="javascript:changelike()">
+												<img src="/landbaksa/images/star_bt.png" id="like_bt">
+											</a>';
+								}else
+								{
+									echo '<a href="javascript:changelike()">
+												<img src="/landbaksa/images/star2_bt.png" id="like_bt">
+											</a>';
+								}
+							?>
+							
 						</div>
 					</div>
 					<div id="like_frame_2"></div>
 					<div id="like_frame_3">
 						<div id="regdate_frame">
-							<div id="regdate_frame_title1">최근 갱신일</div>
-							<div id="regdate_frame_title2">17.07.29</div>
+							<div id="regdate_frame_title1">감정일자</div>
+							<div id="regdate_frame_title2"><?echo substr($search_row["regdate"], 0,10) ?></div>
 						</div>
 						<div id="sellprice_frame">
+							<div id="sellprice_frame_title">감정가</div>
+							<div id="sellprice"><? echo number_format($result_price)?></div>
+							<div id="sellprice_frame_title2">원</div>
+							
+							<div id="sellprice_line"></div>
+							
 							<div id="sellprice_frame_title">매매가</div>
-							<div id="sellprice">340,000,000</div>
+							<div id="sellprice"><? echo number_format($sell_price)?></div>
 							<div id="sellprice_frame_title2">원</div>
 						</div>
 					</div>
 				</div>
 				<!-- 매매,정보 -->
 				<div id="basic_info_frame">
-					
+					<!--
 					<div class="basic_info_frame_title">공시지가</div>
-					<div class="basic_info_frame_content">250,000,000원</div>
-					<div class="basic_info_frame_title">실거래가</div>
-					<div class="basic_info_frame_content">540,000,000원</div>
+					<div class="basic_info_frame_content"><? echo number_format($gong_price)?> 원</div>
+					<div class="basic_info_frame_title">최근 실거래가</div>
+					<div class="basic_info_frame_content"><? echo number_format($sil_price)?> 원 </div>
 					<div class="info_frame_line"></div>
+					-->
 					<div class="basic_info_frame_title">대출금</div>
-					<div class="basic_info_frame_content">100,000,000원</div>
+					<div class="basic_info_frame_content"><? echo number_format($bank_price)?> 원</div>
 					<div class="basic_info_frame_title">보증금</div>
-					<div class="basic_info_frame_content">100,000,000원</div>
+					<div class="basic_info_frame_content"><? echo number_format($deposit_price)?> 원</div>
 					<div class="info_frame_line"></div>
+					<div class="basic_info_frame_title">투자금</div>
+					<div class="basic_info_frame_content"><? echo number_format($need_price)?> 원</div>
 					<div class="basic_info_frame_title">월세</div>
-					<div class="basic_info_frame_content">1,600,000원</div>
-					<div class="basic_info_frame_title">수익률</div>
-					<div class="basic_info_frame_content">6.3%</div>
+					<div class="basic_info_frame_content"><? echo number_format($month_price)?> 원</div>
+					<div class="info_frame_line"></div>
+					<div class="basic_info_frame_title">현 수익률</div>
+					<div class="basic_info_frame_content"><? echo $profit?>%</div>
+					<div class="basic_info_frame_title">예상 성장률</div>
+					<div class="basic_info_frame_content"><? echo $fore_profit?>% (최근3년 공시지가평균 성장율)</div>
 				</div>
 				
 				<!-- 세금,수익률 정보 -->
 				<div id="tax_frame">
 					<div class="tax_frame_title">예상비용</div>
 					<div class="tax_frame_title2">양도소득세</div>
-					<div class="tax_frame_content">35,000,000원</div>
+					<div class="tax_frame_content"><? echo number_format($income_tax)?> 원</div>
 					<div class="tax_frame_title2">취득세</div>
-					<div class="tax_frame_content">15,000,000원</div>
+					<div class="tax_frame_content"><? echo number_format($get_tax)?> 원</div>
 					<div class="tax_frame_title2">중계수수료</div>
-					<div class="tax_frame_content">3,000,000원</div>
+					<div class="tax_frame_content">평균 <? echo number_format($fee)?> 원</div>
 					<div class="tax_frame_title2">임대소득세</div>
-					<div class="tax_frame_content">13,000,000원</div>
+					<div class="tax_frame_content"><? echo number_format($rent_income_tax)?> 원 (분리과세시)</div>
 				</div>
 				
 				<div id="interest_frame">
 					<div class="tax_frame_title">임대업 수익가치</div>
 					<div class="interest_frame_title2">연 7% 수익률 기준 월세 예상액</div>
-					<div class="interest_frame_content">1,700,000원</div>
+					<div class="interest_frame_content"><? echo number_format($predict_money4)?> 원</div>
 					<div class="interest_frame_title2">연 6% 수익률 기준 월세 예상액</div>
-					<div class="interest_frame_content">1,500,000원</div>
+					<div class="interest_frame_content"><? echo number_format($predict_money3)?> 원</div>
 					<div class="interest_frame_title2">연 5% 수익률 기준 월세 예상액</div>
-					<div class="interest_frame_content">1,300,000원</div>
+					<div class="interest_frame_content"><? echo number_format($predict_money2)?> 원</div>
 					<div class="interest_frame_title2">연 4% 수익률 기준 월세 예상액</div>
-					<div class="interest_frame_content">1,100,000원</div>
+					<div class="interest_frame_content"><? echo number_format($predict_money1)?> 원</div>
+				</div>
+				
+				<div id="sil_price_frame">
+					<div class="basic_price_state_frame_title">실거래가 정보</div>
+					<div id="sil_price_info_frame">
+						<div id="sil_price_info_fram_title">
+							<div class='sil_price_size'>전용면적</div>
+							<div class='sil_price_story'>층</div>
+							<div class='sil_price_amount'>매매 실거래가</div>
+							<div class='sil_price_regdate'>등록일자</div>
+							<div class='sil_price_apart_name'>이름</div>
+						</div>
+						<div class="sil_price_info_data_box">
+						<?
+							$sil_pricesql = mysql_query("SELECT * FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY story ASC");
+							
+							$silprice_count = mysql_num_rows($sil_pricesql);
+							if($silprice_count > 1)
+							{
+								while($silprice_row = mysql_fetch_array($sil_pricesql))
+								{
+									echo '<div class="sel_price_info_frame">
+												<div class="sil_price_size2">'.$silprice_row[size].'</div>
+												<div class="sil_price_story2">'.$silprice_row[story].'</div>
+												<div class="sil_price_amount2">'.$silprice_row[amount].",000 원".'</div>
+												<div class="sil_price_regdate2">'.$silprice_row[year].'-'.$silprice_row[month].'-'.$silprice_row[day].'</div>
+												<div class="sil_price_apart_name2">'.$silprice_row[apartment_nm].'</div>
+											</div>';
+								}
+							}else
+							{
+								echo '<div class="sel_price_info_frame">
+										해당 물건은 실거래가 신고내역이 없습니다.
+									</div>';
+							}
+							
+						?>
+						</div>
+						
+					</div>	
+				</div>
+				
+				<div id="gong_price_frame">
+					<div class="basic_price_state_frame_title">공시지가 정보</div>
+					<div id="gong_price_info_frame">
+						<div id="gong_price_info_fram_title">
+							<div class='sil_price_size'>전용면적</div>
+							<div class='sil_price_story'>구분</div>
+							<div class='sil_price_amount'>공시지가</div>
+							<div class='sil_price_regdate'>기준일자</div>
+							<div class='sil_price_apart_name'>이름</div>
+						</div>
+						<div class="gong_price_info_data_box">
+						<?
+							
+							
+							$gong_pricesql = mysql_query("SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY seq DESC");
+							//echo "SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY seq DESC";
+							$gongprice_count = mysql_num_rows($gong_pricesql);
+							if($gongprice_count > 1)
+							{
+								while($gongprice_row = mysql_fetch_array($gong_pricesql))
+								{
+									echo '<div class="sel_price_info_frame">
+												<div class="sil_price_size2">'.$gongprice_row[prvuseAr].'</div>
+												<div class="sil_price_story2">아파트</div>
+												<div class="sil_price_amount2">'.number_format($gongprice_row[pbIntfPc]).' 원</div>
+												<div class="sil_price_regdate2">'.$gongprice_row[lastUpdtDt].'</div>
+												<div class="sil_price_apart_name2">'.$gongprice_row[aphusNm].'</div>
+											</div>';
+								}
+							}else
+							{
+								echo '<div class="sel_price_info_frame">
+										해당 물건은 공지지가 공개내역이 없습니다.
+									</div>';
+							}
+							
+						?>
+						</div>
+					</div>	
 				</div>
 				
 				<!-- 공시지가 성장률 -->
@@ -228,7 +464,85 @@
 					<div id="energy_state_graph">
 					</div>
 				</div>
-				
+
+                <script>
+                    function getOption(legend, xData, ySeriesData, titleText, yAxisName) {
+                        var graphOption = {
+                            title : {
+                                text: titleText
+                            },
+                            tooltip : {
+                                trigger: 'axis'
+                            },
+                            legend: {
+                                data: legend
+                            },
+                            toolbox: {
+                                show : true,
+                                feature : {
+                                    dataZoom : {show: true},
+                                    dataView : {show: true, readOnly: true},
+                                    magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                    restore : {show: true},
+                                    saveAsImage : {show: true}
+                                }
+                            },
+                            calculable : true,
+                            dataZoom : {show : true, start : 20, end : 80},
+                            xAxis : [
+                                {
+                                    type : 'category',
+                                    // boundaryGap : false,
+                                    data : xData
+                                }
+                            ],
+                            yAxis : [
+                                {
+                                    type : 'value',
+                                    name : yAxisName
+                                }
+                            ],
+                            series : (function(){
+                                var result = [];
+                                legend.forEach(function(legendName) {
+                                    var dataForm = {
+                                        name: undefined,
+                                        type: 'bar',
+                                        smooth: true,
+                                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                        data: undefined
+                                    };
+                                    dataForm.name = legendName;
+                                    dataForm.data = ySeriesData[legendName];
+                                    result.push(dataForm);
+                                });
+                                return result;
+                            })(),
+                        };
+                        return graphOption;
+                    }
+
+                    $.ajax({
+                        type: "GET",
+                        url: "CollectInfo_gongprice.php",
+                        data: ({userid: '<?echo $userid?>', law_code: '<?echo $lawcode?>', ji_bun: '<?echo $jibun?>'}),
+                        cache: false,
+//                        dataType: "json",
+                        success: function(data)
+                        {
+//                            console.log(data);
+                            var responseJSON = JSON.parse(data);
+                            console.log(responseJSON);
+
+                            // 공시지가 그래프 생성
+                            var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
+                            gongPriceGraph.setOption(getOption(Object.keys(responseJSON['데이터']), responseJSON['기준년도'], responseJSON['데이터'], '', '공시가격'));
+                            window.addEventListener("resize", function() {
+                                gongPriceGraph.resize();
+                            });
+                        }
+                    });
+                </script>
 				 
 			</div>
 		</div>
