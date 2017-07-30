@@ -146,41 +146,41 @@
 
 
 /*최근 5년간의 공시지가 데이터 삽입*/
-//    $years = array(2016, 2015, 2014, 2013, 2012);
-//
-//    foreach ($years as $standardYear) {
-////        echo '[ '.$standardYear.' ]'.'<br/>';
-//
-//        /*아파트 공시지가 데이터 삽입*/
-//        // 데이터 요청
-//        $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
-////        echo '1. Apartment Housing Price<br/>';
-//        // 데이터 갯수 확인
-////        echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
-//        // 데이터 삽입
-//        insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
-//
-//
-//        /*건물 공시지가 데이터 삽입*/
-//        // 데이터 요청
-//        $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
-////        echo '2. Building Housing Price<br/>';
-//        // 데이터 갯수 확인
-////        echo 'totalCount: '.$responseData['indvdHousingPrices']['totalCount'].'<br/>';
-//        // 데이터 삽입
-//        insertData('landbaksa_gongprice_building_info', $responseData['indvdHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'ladRegstrAr', 'housePc'));
-//
-//
-//        /*토지 공시지가 데이터 삽입*/
-//        // 데이터 요청
-//        $responseData = getRequestData($indvdLandPriceURL, $lawcode, $bun, $ji, $standardYear);
-////        echo '3. Land Housing Price<br/>';
-//        // 데이터 갯수 확인
-////        echo 'totalCount: '.$responseData['indvdLandPrices']['totalCount'].'<br/>';
-//        // 데이터 삽입
-//        insertData('landbaksa_gongprice_land_info', $responseData['indvdLandPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'pblntfPclnd', 'pblntfDe'));
-//    }
-////    echo 'Done!';
+    $years = array(2016, 2015, 2014, 2013, 2012);
+
+    foreach ($years as $standardYear) {
+//        echo '[ '.$standardYear.' ]'.'<br/>';
+
+        /*아파트 공시지가 데이터 삽입*/
+        // 데이터 요청
+        $responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
+//        echo '1. Apartment Housing Price<br/>';
+        // 데이터 갯수 확인
+//        echo 'totalCount: '.$responseData['apartHousingPrices']['totalCount'].'<br/>';
+        // 데이터 삽입
+        insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
+
+
+        /*건물 공시지가 데이터 삽입*/
+        // 데이터 요청
+        $responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
+//        echo '2. Building Housing Price<br/>';
+        // 데이터 갯수 확인
+//        echo 'totalCount: '.$responseData['indvdHousingPrices']['totalCount'].'<br/>';
+        // 데이터 삽입
+        insertData('landbaksa_gongprice_building_info', $responseData['indvdHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'ladRegstrAr', 'housePc'));
+
+
+        /*토지 공시지가 데이터 삽입*/
+        // 데이터 요청
+        $responseData = getRequestData($indvdLandPriceURL, $lawcode, $bun, $ji, $standardYear);
+//        echo '3. Land Housing Price<br/>';
+        // 데이터 갯수 확인
+//        echo 'totalCount: '.$responseData['indvdLandPrices']['totalCount'].'<br/>';
+        // 데이터 삽입
+        insertData('landbaksa_gongprice_land_info', $responseData['indvdLandPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'pblntfPclnd', 'pblntfDe'));
+    }
+//    echo 'Done!';
 
 
 /*API 응답 부분*/
