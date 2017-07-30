@@ -1,7 +1,3 @@
-<html>
-<head><meta charset="UTF-8"></head>
-<body>
-
 <?php
 	include $_SERVER["DOCUMENT_ROOT"]."/landbaksa/database/inc_dbconnect.php";
 
@@ -191,6 +187,8 @@
     $landBookCode = 1; // 토지(임야)대장구분
     $pnu = $lawcode.$landBookCode.$bun.$ji;
     $result = array();
+    $yearToIndex = array("2012" => 0, "2013" => 1, "2014" => 2, "2015" => 3, "2016" => 4);
+    $result['기준년도'] = array("2012", "2013", "2014", "2015", "2016");
 
     // 아파트 공시지가
     $queryResrc = mysql_query("SELECT DISTINCT prvuseAr FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu");
@@ -200,23 +198,21 @@
             $prvuseArList[] = $row['prvuseAr'];
 
         foreach ($prvuseArList as $prvuseAr) {
-            $apartResult = array("기준년도" => array(), "공시가격평균" => array());
+            $apartResult = array(0, 0, 0, 0, 0); // 공시가격평균
             $queryResrc = mysql_query("SELECT stdrYear, AVG(pblntfPc) FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu AND prvuseAr=$prvuseAr GROUP BY stdrYear");
             while ($row = mysql_fetch_assoc($queryResrc)) {
-                $apartResult["기준년도"][] = $row['stdrYear'];
-                $apartResult["공시가격평균"][] = $row['AVG(pblntfPc)'];
+                $apartResult[$yearToIndex[$row['stdrYear']]] = $row['AVG(pblntfPc)'];
             }
-            $result['아파트 - ' . $prvuseAr] = $apartResult;
+            $result['아파트 - '.$prvuseAr] = $apartResult;
         }
     }
 
     // 건물 공시지가
     $queryResrc = mysql_query("SELECT stdrYear, housePc FROM landbaksa_gongprice_building_info WHERE pnu=$pnu ORDER BY stdrYear");
     if(mysql_num_rows($queryResrc) > 0) {
-        $buildingResult = array("기준년도" => array(), "공시가격" => array());
+        $buildingResult = array(0, 0, 0, 0, 0); // 주택가격
         while ($row = mysql_fetch_assoc($queryResrc)) {
-            $buildingResult["기준년도"][] = $row['stdrYear'];
-            $buildingResult["공시가격"][] = $row['housePc'];
+            $buildingResult[$yearToIndex[$row['stdrYear']]] = $row['housePc'];
         }
         $result['건물'] = $buildingResult;
     }
@@ -224,18 +220,14 @@
     // 토지 공시지가
     $queryResrc = mysql_query("SELECT stdrYear, pblntfPclnd FROM landbaksa_gongprice_land_info WHERE pnu=$pnu ORDER BY stdrYear");
     if(mysql_num_rows($queryResrc) > 0) {
-        $landResult = array("기준년도" => array(), "공시가격" => array());
+        $landResult = array(0, 0, 0, 0, 0); // 공시가격
         while ($row = mysql_fetch_assoc($queryResrc)) {
-            $landResult["기준년도"][] = $row['stdrYear'];
-            $landResult["공시가격"][] = $row['pblntfPclnd'];
+            $landResult[$yearToIndex[$row['stdrYear']]] = $row['pblntfPclnd'];
         }
         $result['토지'] = $landResult;
     }
 
-    print_r($result);
-//    var_dump(json_encode($result));
+//    print_r($result);
+    echo json_encode($result);
 
 ?>
-
-</body>
-</html>
