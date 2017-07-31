@@ -450,6 +450,54 @@
 					<div id="basic_price_state_graph">
                         해당 물건은 공시지가 공개내역이 없습니다.
 					</div>
+                    <?
+                        // 공시지가 데이터
+                        $landBookCode = 1; // 토지(임야)대장구분
+                        $pnu = $lawcode.$landBookCode.$bun.$ji;
+                        $gongPriceResult = array();
+                        $yearToIndex = array("2012" => 0, "2013" => 1, "2014" => 2, "2015" => 3, "2016" => 4);
+                        $gongPriceResult['기준년도'] = array("2012", "2013", "2014", "2015", "2016");
+                        $gongPriceResult['데이터'] = array();
+
+                        // 아파트 공시지가
+                        $queryResrc = mysql_query("SELECT DISTINCT prvuseAr FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu");
+                        if(mysql_num_rows($queryResrc) > 0) {
+                            $prvuseArList = array();
+                            while ($row = mysql_fetch_assoc($queryResrc))
+                                $prvuseArList[] = $row['prvuseAr'];
+
+                            foreach ($prvuseArList as $prvuseAr) {
+                                $apartResult = array(0, 0, 0, 0, 0); // 공시가격평균
+                                $queryResrc = mysql_query("SELECT stdrYear, AVG(pblntfPc) FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu AND prvuseAr=$prvuseAr GROUP BY stdrYear");
+                                while ($row = mysql_fetch_assoc($queryResrc)) {
+                                    $apartResult[$yearToIndex[$row['stdrYear']]] = $row['AVG(pblntfPc)'];
+                                }
+                                $gongPriceResult['데이터']['아파트('.$prvuseAr.')'] = $apartResult;
+                            }
+                        }
+
+                        // 건물 공시지가
+                        $queryResrc = mysql_query("SELECT stdrYear, housePc FROM landbaksa_gongprice_building_info WHERE pnu=$pnu ORDER BY stdrYear");
+                        if(mysql_num_rows($queryResrc) > 0) {
+                            $buildingResult = array(0, 0, 0, 0, 0); // 주택가격
+                            while ($row = mysql_fetch_assoc($queryResrc)) {
+                                $buildingResult[$yearToIndex[$row['stdrYear']]] = $row['housePc'];
+                            }
+                            $gongPriceResult['데이터']['건물'] = $buildingResult;
+                        }
+
+                        // 토지 공시지가
+                        $queryResrc = mysql_query("SELECT stdrYear, pblntfPclnd FROM landbaksa_gongprice_land_info WHERE pnu=$pnu ORDER BY stdrYear");
+                        if(mysql_num_rows($queryResrc) > 0) {
+                            $landResult = array(0, 0, 0, 0, 0); // 공시가격
+                            while ($row = mysql_fetch_assoc($queryResrc)) {
+                                $landResult[$yearToIndex[$row['stdrYear']]] = $row['pblntfPclnd'];
+                            }
+                            $gongPriceResult['데이터']['토지'] = $landResult;
+                        }
+
+                        $gongPriceResult = json_encode($gongPriceResult);
+                    ?>
 				</div>
 				
 				<!-- 실거래가 성장률 -->
@@ -602,26 +650,16 @@
                     }
 
 
-                    $.ajax({
-                        type: "GET",
-                        url: "CollectInfo_gongprice.php",
-                        data: ({userid: '<?echo $userid?>', law_code: '<?echo $lawcode?>', ji_bun: '<?echo $jibun?>'}),
-                        cache: false,
-//                        dataType: "json",
-                        success: function(data)
-                        {
-//                            console.log(data);
-                            var responseJSON = JSON.parse(data);
-                            console.log(responseJSON);
-
-                            // 공시지가 그래프 생성
-                            var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
-                            gongPriceGraph.setOption(getOption(Object.keys(responseJSON['데이터']), responseJSON['기준년도'], responseJSON['데이터'], '', '공시가격'));
-                            window.addEventListener("resize", function() {
-                                gongPriceGraph.resize();
-                            });
-                        }
-                    });
+                    // 공시지가 그래프 생성
+                    var gongPriceJSON = JSON.parse('<?echo $gongPriceResult?>');
+                    console.log(gongPriceJSON);
+                    if(gongPriceJSON['기준년도'].length) {
+                        var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
+                        gongPriceGraph.setOption(getOption(Object.keys(gongPriceJSON['데이터']), gongPriceJSON['기준년도'], gongPriceJSON['데이터'], '', '공시가격'));
+                        window.addEventListener("resize", function() {
+                            gongPriceGraph.resize();
+                        });
+                    }
 
                     // 실거래가 그래프 생성
                     var silPriceJSON = JSON.parse('<?echo $silPriceResult?>');
