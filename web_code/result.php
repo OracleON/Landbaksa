@@ -456,6 +456,68 @@
 					<div class="basic_price_state_frame_title">실거래가 성장률</div>
 					<div id="real_price_state_graph">
 					</div>
+                    <?
+                        // 실거래가 데이터
+                        $silPriceResult = array("기준년월" => array(), "데이터" => array());
+                        $queryResrc = mysql_query("SELECT "."year, month, size, story"." FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji");
+                        if(mysql_num_rows($queryResrc) > 0) {
+                            $yearMonthSet = array();
+                            $sizeSet = array();
+                            $storySet = array();
+                            while ($row = mysql_fetch_assoc($queryResrc)) {
+                                $month = "00".$row['month'];
+                                $month = substr($month, -2,2);
+                                $yearMonthSet[$row['year'].$month] = 0;
+                                $sizeSet[$row['size'].''] = 0;
+                                if($row['story'] != NULL)
+                                    $storySet[$row['story'].''] = 0;
+                            }
+
+                            $yearMonthList = array_keys($yearMonthSet);
+                            sort($yearMonthList);
+                            $sizeList = array_keys($sizeSet);
+                            $storyList = array_keys($storySet);
+
+                            $silPriceResult['기준년월'] = $yearMonthList;
+
+                            $yearMonthToIndex = array();
+                            $countVal = 0;
+                            foreach ($yearMonthList as $yearMonth) {
+                                $yearMonthToIndex[$yearMonth] = $countVal;
+                                $countVal++;
+                            }
+
+                            foreach ($sizeList as $size) {
+                                if(empty($storyList)) {
+                                    $apartSilResult = array_fill(0, count($yearMonthList), 0);
+                                    $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji AND size=$size");
+                                    if(mysql_num_rows($queryResrc) > 0) {
+                                        while ($row = mysql_fetch_assoc($queryResrc)) {
+                                            $month = "00".$row['month'];
+                                            $month = substr($month, -2,2);
+                                            $apartSilResult[$yearMonthToIndex[$row['year'].$month]] = str_replace(',', '', $row['amount']);
+                                        }
+                                        $silPriceResult['데이터']['아파트('.$size.')'] = $apartSilResult;
+                                    }
+                                }
+                                else {
+                                    foreach ($storyList as $story) {
+                                        $apartSilResult = array_fill(0, count($yearMonthList), 0);
+                                        $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji AND size=$size AND story=$story");
+                                        if(mysql_num_rows($queryResrc) > 0) {
+                                            while ($row = mysql_fetch_assoc($queryResrc)) {
+                                                $month = "00".$row['month'];
+                                                $month = substr($month, -2,2);
+                                                $apartSilResult[$yearMonthToIndex[$row['year'].$month]] = str_replace(',', '', $row['amount']);
+                                            }
+                                            $silPriceResult['데이터']['아파트('.$size.', '.$story.'층)'] = $apartSilResult;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $silPriceResult = json_encode($silPriceResult);
+                    ?>
 				</div>
 				
 				<!-- 에너지 사용량 성장률 -->
@@ -463,6 +525,20 @@
 					<div class="basic_price_state_frame_title">에너지 사용량 분석</div>
 					<div id="energy_state_graph">
 					</div>
+                    <?
+                        // 에너지 사용량 데이터
+                        $energyResult = array("기준년월" => array(), "데이터" => array());
+                        $queryResrc = mysql_query("SELECT useYm, useQty FROM landbaksa_energy_info WHERE law_code=$lawcode AND bun=$bun AND ji=$ji ORDER BY useYm");
+                        if(mysql_num_rows($queryResrc) > 0) {
+                            $useQtyList = array();
+                            while ($row = mysql_fetch_assoc($queryResrc)) {
+                                $energyResult['기준년월'][] = $row['useYm'];
+                                $useQtyList[] = $row['useQty'];
+                            }
+                            $energyResult['데이터']['에너지 사용량'] = $useQtyList;
+                        }
+                        $energyResult = json_encode($energyResult);
+                    ?>
 				</div>
 
                 <script>
@@ -478,7 +554,7 @@
                                 data: legend
                             },
                             toolbox: {
-                                show : true,
+                                show : false,
                                 feature : {
                                     dataZoom : {show: true},
                                     dataView : {show: true, readOnly: true},
@@ -522,6 +598,7 @@
                         return graphOption;
                     }
 
+
                     $.ajax({
                         type: "GET",
                         url: "CollectInfo_gongprice.php",
@@ -541,6 +618,24 @@
                                 gongPriceGraph.resize();
                             });
                         }
+                    });
+
+                    // 실거래가 그래프 생성
+                    var silPriceJSON = JSON.parse('<?echo $silPriceResult?>');
+                    console.log(silPriceJSON);
+                    var silPriceGraph = echarts.init(document.getElementById('real_price_state_graph'), theme);
+                    silPriceGraph.setOption(getOption(Object.keys(silPriceJSON['데이터']), silPriceJSON['기준년월'], silPriceJSON['데이터'], '', '실거래가격'));
+                    window.addEventListener("resize", function() {
+                        silPriceGraph.resize();
+                    });
+
+                    // 에너지 그래프 생성
+                    var energyJSON = JSON.parse('<?echo $energyResult?>');
+                    console.log(energyJSON);
+                    var energyGraph = echarts.init(document.getElementById('energy_state_graph'), theme);
+                    energyGraph.setOption(getOption(['에너지 사용량'], energyJSON['기준년월'], energyJSON['데이터'], '', '사용량'));
+                    window.addEventListener("resize", function() {
+                        energyGraph.resize();
                     });
                 </script>
 				 
