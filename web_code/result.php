@@ -435,7 +435,7 @@
 							}else
 							{
 								echo '<div class="sel_price_info_frame">
-										해당 물건은 공지지가 공개내역이 없습니다.
+										해당 물건은 공시지가 공개내역이 없습니다.
 									</div>';
 							}
 							
@@ -448,6 +448,7 @@
 				<div id="basic_price_state_frame">
 					<div class="basic_price_state_frame_title">공시지가 성장률</div>
 					<div id="basic_price_state_graph">
+                        해당 물건은 공시지가 공개내역이 없습니다.
 					</div>
 				</div>
 				
@@ -455,6 +456,7 @@
 				<div id="real_price_state_frame">
 					<div class="basic_price_state_frame_title">실거래가 성장률</div>
 					<div id="real_price_state_graph">
+                        해당 물건은 실거래가 공개내역이 없습니다.
 					</div>
                     <?
                         // 실거래가 데이터
@@ -524,6 +526,7 @@
 				<div id="energy_state_frame">
 					<div class="basic_price_state_frame_title">에너지 사용량 분석</div>
 					<div id="energy_state_graph">
+                        해당 물건은 에너지 사용량 공개내역이 없습니다.
 					</div>
                     <?
                         // 에너지 사용량 데이터
@@ -623,20 +626,24 @@
                     // 실거래가 그래프 생성
                     var silPriceJSON = JSON.parse('<?echo $silPriceResult?>');
                     console.log(silPriceJSON);
-                    var silPriceGraph = echarts.init(document.getElementById('real_price_state_graph'), theme);
-                    silPriceGraph.setOption(getOption(Object.keys(silPriceJSON['데이터']), silPriceJSON['기준년월'], silPriceJSON['데이터'], '', '실거래가격'));
-                    window.addEventListener("resize", function() {
-                        silPriceGraph.resize();
-                    });
+                    if(silPriceJSON['기준년월'].length) {
+                        var silPriceGraph = echarts.init(document.getElementById('real_price_state_graph'), theme);
+                        silPriceGraph.setOption(getOption(Object.keys(silPriceJSON['데이터']), silPriceJSON['기준년월'], silPriceJSON['데이터'], '', '실거래가격'));
+                        window.addEventListener("resize", function() {
+                            silPriceGraph.resize();
+                        });
+                    }
 
                     // 에너지 그래프 생성
                     var energyJSON = JSON.parse('<?echo $energyResult?>');
                     console.log(energyJSON);
-                    var energyGraph = echarts.init(document.getElementById('energy_state_graph'), theme);
-                    energyGraph.setOption(getOption(['에너지 사용량'], energyJSON['기준년월'], energyJSON['데이터'], '', '사용량'));
-                    window.addEventListener("resize", function() {
-                        energyGraph.resize();
-                    });
+                    if(energyJSON['기준년월'].length) {
+                        var energyGraph = echarts.init(document.getElementById('energy_state_graph'), theme);
+                        energyGraph.setOption(getOption(['에너지 사용량'], energyJSON['기준년월'], energyJSON['데이터'], '', '사용량'));
+                        window.addEventListener("resize", function() {
+                            energyGraph.resize();
+                        });
+                    }
                 </script>
 				 
 			</div>
