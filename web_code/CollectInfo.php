@@ -24,6 +24,7 @@
 	
 	$sil_price ='0';
 	$gong_price ='0';
+	$gong_land_price ='0';
 	
 	$need_price ='0';
 	$profit = '0';
@@ -41,7 +42,7 @@
 	
 	$today = date('Ym'); //이번달
 	
-	$monthArray = array('201601','201602','201603','201604','201605','201606','201607','201608','201609','201610','201611','201612');
+	$monthArray = array('201601','201602','201603','201604','201605','201606','201607','201608','201609','201610','201611','201612','201701','201702','201703','201704','201705','201706');
 	
 	$energy_getcount = 0;
 	
@@ -53,6 +54,7 @@
 		// ====> 에너지 API
 		$energy_query ='http://apis.data.go.kr/1611000/BldEngyService/getBeElctyUsgInfo?serviceKey='.$apikey.'&numOfRows=10&pageSize=10&pageNo=1&startPage=1&sigunguCd='.$sigunguCd.'&bjdongCd='.$bjdongCd.'&bun='.$bun.'&ji='.$ji.'&useYm='.$monthinfo;
 		
+		//echo $energy_query;
 		//$response = get($energy_query); 
 		$url = $energy_query;        //호출대상 URL
 	    $ch = curl_init(); //파라미터:url -선택사항
@@ -75,10 +77,10 @@
 	    $totalCount = $object_json['body']['totalCount'];
 	    $useYm = $object_json['body']['items']['item']['useYm'];
 	    $useQty = $object_json['body']['items']['item']['useQty'];
-	    $sigunguCd = $object_json['body']['items']['item']['sigunguCd'];
-	    $bjdongCd = $object_json['body']['items']['item']['bjdongCd'];
-	    $bun = $object_json['body']['items']['item']['bun'];
-	    $ji = $object_json['body']['items']['item']['ji'];
+	    $sigunguCd_energy = $object_json['body']['items']['item']['sigunguCd'];
+	    $bjdongCd_energy = $object_json['body']['items']['item']['bjdongCd'];
+	    $bun_energy = $object_json['body']['items']['item']['bun'];
+	    $ji_energy = $object_json['body']['items']['item']['ji'];
 	    $platPlc =$object_json['body']['items']['item']['platPlc'];
 	    $newPlatPlc = $object_json['body']['items']['item']['newPlatPlc'];
 	    $naRoadCd = $object_json['body']['items']['item']['naRoadCd'];
@@ -105,14 +107,14 @@
 		
 		if($totalCount > 0)
 		{
-			$presql = mysql_query("SELECT useYm FROM landbaksa_energy_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND useYm='$useYm'");
+			$presql = mysql_query("SELECT useYm FROM landbaksa_energy_info WHERE sigunguCd='$sigunguCd_energy' AND bjdongCd='$bjdongCd_energy' AND useYm='$useYm' AND bun='$bun_energy' AND ji ='$ji_energy'");
 			$precount = mysql_num_rows($presql);
 			
 			if($precount > 0)
 			{
 			}else
 			{
-				$insertsql = "INSERT INTO landbaksa_energy_info SET useYm='$useYm',useQty='$useQty',sigunguCd='$sigunguCd',bjdongCd='$bjdongCd',bun='$bun',ji='$ji',platPlc='$platPlc',newPlatPlc='$newPlatPlc',naRoadCd='$naRoadCd',naUgrndCd='$naUgrndCd',naMainBun='$naMainBun',naSubBun='$naSubBun',law_code='$law_code', regdate=NOW()";
+				$insertsql = "INSERT INTO landbaksa_energy_info SET useYm='$useYm',useQty='$useQty',sigunguCd='$sigunguCd_energy',bjdongCd='$bjdongCd_energy',bun='$bun_energy',ji='$ji_energy',platPlc='$platPlc',newPlatPlc='$newPlatPlc',naRoadCd='$naRoadCd',naUgrndCd='$naUgrndCd',naMainBun='$naMainBun',naSubBun='$naSubBun',law_code='$law_code', regdate=NOW()";
 				//echo $insertsql;
 				$temp = mysql_query($insertsql);
 				
@@ -257,21 +259,24 @@
 
 /*최근 5년간의 공시지가 데이터 삽입*/
 	$years = array(2016, 2015, 2014, 2013, 2012);
-
+//
 	foreach ($years as $standardYear) {
 		/*아파트 공시지가 데이터 삽입*/
 		// 데이터 요청
-		$responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
+		if($apartment_type == 'Y')
+		{
+			$responseData = getRequestData($apartHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
 		// 데이터 삽입
-		insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
+			insertData('landbaksa_gongprice_apart_info', $responseData['apartHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'prvuseAr', 'pblntfPc'));
 
-
-		/*건물 공시지가 데이터 삽입*/
+		}else
+		{
+			/*건물 공시지가 데이터 삽입*/
 		// 데이터 요청
 		$responseData = getRequestData($indvdHousingPriceURL, $lawcode, $bun, $ji, $standardYear);
 		// 데이터 삽입
 		insertData('landbaksa_gongprice_building_info', $responseData['indvdHousingPrices']['field'], array('pnu', 'stdrYear', 'stdrMt', 'ladRegstrAr', 'housePc'));
-
+		}
 
 		/*토지 공시지가 데이터 삽입*/
 		// 데이터 요청
@@ -294,20 +299,57 @@
 	//실거래가 가져오기
 	
 	$silpricesql = mysql_query("SELECT amount, month, day,size,story FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY seq DESC LIMIT 1");
-	$silprice_row = mysql_fetch_array($silpricesql);
 	
-	$sil_price = $silprice_row['amount'];
-	if($sil_price != '0' && $sil_price != '')
+	//echo "SELECT amount, month, day,size,story FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY seq DESC LIMIT 1";
+	
+	$sil_pricesql_num = mysql_num_rows($silpricesql);
+	if($sil_pricesql_num > 0)
 	{
-		$sil_price = (int)(str_replace($sil_price, ",", "")."0000");
+		$silprice_row = mysql_fetch_array($silpricesql);
+		$sil_price = $silprice_row['amount'];
+		$sil_price = str_replace(",", "", $sil_price)."0000";
 	}else
 	{
 		$sil_price ='0';
 	}
+
+	
+	// 공시지가 가져오기
+	
+	if($apartment_type == 'Y')
+	{
+		$gongpricesql = mysql_query("SELECT pblntfPc,prvuseAr FROM landbaksa_gongprice_apart_info WHERE ldCode ='$lawcode' AND mnnmSlno ='$jibun' ORDER BY seq DESC LIMIT 1");
+		$gong_pricesql_num = mysql_num_rows($gongpricesql);
+		if($gong_pricesql_num > 0)
+		{
+			$gongprice_row = mysql_fetch_array($gongpricesql);
+			$gong_price = $$gongprice_row['pblntfPc'];
+		}	
+	}else
+	{
+		$gongpricesql = mysql_query("SELECT housePc,buldCalcTotAr FROM landbaksa_gongprice_building_info WHERE ldCode ='$lawcode' AND mnnmSlno ='$jibun' ORDER BY stdrYear DESC LIMIT 1");
+		$gong_pricesql_num = mysql_num_rows($gongpricesql);
+		if($gong_pricesql_num > 0)
+		{
+			$gongprice_row = mysql_fetch_array($gongpricesql);
+			$gong_price = $$gongprice_row['housePc'];
+		}
+		
+	}
+	
+	$gonglandpricesql = mysql_query("SELECT pblntfPclnd FROM landbaksa_gongprice_land_info WHERE ldCode ='$lawcode' AND mnnmSlno ='$jibun' ORDER BY stdrYear DESC LIMIT 1");
+	$gong_land_pricesql_num = mysql_num_rows($gonglandpricesql);
+	if($gong_land_pricesql_num > 0)
+	{
+		$gong_landprice_row = mysql_fetch_array($gonglandpricesql);
+		$gong_land_price = $$gong_landprice_row['pblntfPclnd'];
+	}
+
+	
 	
 	//검색 히스토리 테이블 작업
 	
-	$historysql ="INSERT INTO landbaksa_search_history SET userid='$userid',username='$username',address='$address',law_code='$lawcode',jibun_code='$jibun',gong_price='$gong_price',sil_price='$sil_price',regdate=NOW(),like_yn='n',type='$search_type'";
+	$historysql ="INSERT INTO landbaksa_search_history SET userid='$userid',username='$username',address='$address',law_code='$lawcode',jibun_code='$jibun',gong_price='$gong_price',gong_land_price='$gong_land_price',sil_price='$sil_price',regdate=NOW(),like_yn='n',type='$search_type'";
 	$historyok = mysql_query($historysql);
 	
 	$gethistory = mysql_query("SELECT seq FROM landbaksa_search_history WHERE userid='$userid' AND law_code='$lawcode' AND jibun_code='$jibun' ORDER BY seq DESC LIMIT 1");

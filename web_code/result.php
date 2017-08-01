@@ -17,8 +17,9 @@
 	$cate =$_GET["cate"];
 	$apartment=$_GET["apartment"];
 	
+	
+	$address2=$_GET["address"];
 	/*
-	$address=$_GET["address"];
 	$lawcode=$_GET["lawcode"];
 	$jibun=$_GET["jibun"];
 	$searchtype = $_GET["searchtype"];
@@ -375,17 +376,22 @@
 						</div>
 						<div class="sil_price_info_data_box">
 						<?
-							$sil_pricesql = mysql_query("SELECT * FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY story ASC");
+							$sil_pricesql = mysql_query("SELECT * FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY year,month,day DESC");
 							
 							$silprice_count = mysql_num_rows($sil_pricesql);
+							
+							
+							
 							if($silprice_count > 1)
 							{
 								while($silprice_row = mysql_fetch_array($sil_pricesql))
 								{
+									$temp_silprice = str_replace(",", "", $silprice_row[amount])."0000"; 
+									
 									echo '<div class="sel_price_info_frame">
 												<div class="sil_price_size2">'.$silprice_row[size].'</div>
 												<div class="sil_price_story2">'.$silprice_row[story].'</div>
-												<div class="sil_price_amount2">'.$silprice_row[amount].",000 원".'</div>
+												<div class="sil_price_amount2">'.number_format($temp_silprice).'원</div>
 												<div class="sil_price_regdate2">'.$silprice_row[year].'-'.$silprice_row[month].'-'.$silprice_row[day].'</div>
 												<div class="sil_price_apart_name2">'.$silprice_row[apartment_nm].'</div>
 											</div>';
@@ -427,7 +433,7 @@
 									echo '<div class="sel_price_info_frame">
 												<div class="sil_price_size2">'.$gongprice_row[prvuseAr].'</div>
 												<div class="sil_price_story2">아파트</div>
-												<div class="sil_price_amount2">'.number_format($gongprice_row[pbIntfPc]).' 원</div>
+												<div class="sil_price_amount2">'.number_format($gongprice_row[pblntfPc]).' 원</div>
 												<div class="sil_price_regdate2">'.$gongprice_row[lastUpdtDt].'</div>
 												<div class="sil_price_apart_name2">'.$gongprice_row[aphusNm].'</div>
 											</div>';
@@ -615,7 +621,7 @@
                                 }
                             },
                             calculable : true,
-                            dataZoom : {show : true, start : 20, end : 80},
+                            dataZoom : {show : true, start : 0, end : 100},
                             xAxis : [
                                 {
                                     type : 'category',
@@ -653,7 +659,7 @@
                     // 공시지가 그래프 생성
                     var gongPriceJSON = JSON.parse('<?echo $gongPriceResult?>');
                     console.log(gongPriceJSON);
-                    if(gongPriceJSON['기준년도'].length) {
+                    if(Object.keys(gongPriceJSON['데이터']).length) {
                         var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
                         gongPriceGraph.setOption(getOption(Object.keys(gongPriceJSON['데이터']), gongPriceJSON['기준년도'], gongPriceJSON['데이터'], '', '공시가격'));
                         window.addEventListener("resize", function() {

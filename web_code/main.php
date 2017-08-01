@@ -32,8 +32,8 @@
 			<?php include_once $_SERVER["DOCUMENT_ROOT"]."/landbaksa/web_code/common_top.php"; ?>
 		</div>
 		<div id="body_wrap">
-			<div id="body_warp_frame"> <!-- TEST -->
-				검색페이지
+			<div id="body_warp_frame">
+				검색페이지 
 			</div>
 		</div>
 		<div id="bottom_wrap">

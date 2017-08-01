@@ -82,6 +82,11 @@
 			{
 				alert('매매금액이 너무 작습니다. 다시 입력하세요.');
 				
+			}else if(Number(tempsellprice.replace(/,/gi, "")) < Number(tempbankprice.replace(/,/gi, ""))+Number(tempdepositprice.replace(/,/gi, "")))
+			{
+				alert(tempbankprice.replace(/,/gi, "")+"+"+tempdepositprice.replace(/,/gi, "")+">"+tempsellprice.replace(/,/gi, ""));
+				alert('대출금 + 보증금이 매매가 보다 높을수 없습니다./n 다시 입력하세요.');
+				
 			}else
 			{
 				var tempaddress2 = tempaddress.replace('(', '');
@@ -95,6 +100,8 @@
 				var jibun = $('#jibun').val();
 				var apartment = $('#apartment').val();
 				
+				var historyseq ='';
+				
 				$('#background_layer').fadeIn();
 				$('#loading').fadeIn();
 				
@@ -102,6 +109,12 @@
 						//alert('getparams 준비.'+getparams);
 				$.getJSON("CollectInfo.php",getparams,function(data){	
 					$.each(data, function(key, value){
+						
+							if(key == "history_seq")
+							{
+								historyseq = value;
+							}
+							
 							if(key == "signupJson")
 							{
 								if(value == "insertok")
@@ -116,7 +129,7 @@
 												//$("#loding").popup("close");
 												//$('#loading').hide();
 												
-												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=info;
+												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=info&history_seq="+historyseq;
 												 }, 1000);
 								}
 								if(value == "no")

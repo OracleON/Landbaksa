@@ -70,6 +70,8 @@
 				var jibun = $('#jibun').val();
 				var apartment = $('#apartment').val();
 				
+				var historyseq ='';
+				
 				$('#background_layer').fadeIn();
 				$('#loading').fadeIn();
 				
@@ -77,6 +79,11 @@
 						//alert('getparams 준비.'+getparams);
 				$.getJSON("CollectInfo.php",getparams,function(data){	
 					$.each(data, function(key, value){
+							if(key == "history_seq")
+							{
+								historyseq = value;
+							}
+							
 							if(key == "signupJson")
 							{
 								if(value == "insertok")
@@ -91,7 +98,7 @@
 												//$("#loding").popup("close");
 												//$('#loading').hide();
 												
-												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=address";
+												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=address&history_seq="+historyseq;
 												 }, 1000);
 								}
 								if(value == "no")
