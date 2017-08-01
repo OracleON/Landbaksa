@@ -466,7 +466,7 @@
                         $gongPriceResult['데이터'] = array();
 
                         // 아파트 공시지가
-                        $queryResrc = mysql_query("SELECT DISTINCT prvuseAr FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu");
+                        $queryResrc = mysql_query("SELECT DISTINCT prvuseAr FROM landbaksa_gongprice_apart_info WHERE pnu='$pnu'");
                         if(mysql_num_rows($queryResrc) > 0) {
                             $prvuseArList = array();
                             while ($row = mysql_fetch_assoc($queryResrc))
@@ -474,7 +474,7 @@
 
                             foreach ($prvuseArList as $prvuseAr) {
                                 $apartResult = array(0, 0, 0, 0, 0); // 공시가격평균
-                                $queryResrc = mysql_query("SELECT stdrYear, AVG(pblntfPc) FROM landbaksa_gongprice_apart_info WHERE pnu=$pnu AND prvuseAr=$prvuseAr GROUP BY stdrYear");
+                                $queryResrc = mysql_query("SELECT stdrYear, AVG(pblntfPc) FROM landbaksa_gongprice_apart_info WHERE pnu='$pnu' AND prvuseAr='$prvuseAr' GROUP BY stdrYear");
                                 while ($row = mysql_fetch_assoc($queryResrc)) {
                                     $apartResult[$yearToIndex[$row['stdrYear']]] = $row['AVG(pblntfPc)'];
                                 }
@@ -483,7 +483,7 @@
                         }
 
                         // 건물 공시지가
-                        $queryResrc = mysql_query("SELECT stdrYear, housePc FROM landbaksa_gongprice_building_info WHERE pnu=$pnu ORDER BY stdrYear");
+                        $queryResrc = mysql_query("SELECT stdrYear, housePc FROM landbaksa_gongprice_building_info WHERE pnu='$pnu' ORDER BY stdrYear");
                         if(mysql_num_rows($queryResrc) > 0) {
                             $buildingResult = array(0, 0, 0, 0, 0); // 주택가격
                             while ($row = mysql_fetch_assoc($queryResrc)) {
@@ -493,7 +493,7 @@
                         }
 
                         // 토지 공시지가
-                        $queryResrc = mysql_query("SELECT stdrYear, pblntfPclnd FROM landbaksa_gongprice_land_info WHERE pnu=$pnu ORDER BY stdrYear");
+                        $queryResrc = mysql_query("SELECT stdrYear, pblntfPclnd FROM landbaksa_gongprice_land_info WHERE pnu='$pnu' ORDER BY stdrYear");
                         if(mysql_num_rows($queryResrc) > 0) {
                             $landResult = array(0, 0, 0, 0, 0); // 공시가격
                             while ($row = mysql_fetch_assoc($queryResrc)) {
@@ -515,7 +515,7 @@
                     <?
                         // 실거래가 데이터
                         $silPriceResult = array("기준년월" => array(), "데이터" => array());
-                        $queryResrc = mysql_query("SELECT "."year, month, size, story"." FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji");
+                        $queryResrc = mysql_query("SELECT "."year, month, size, story"." FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji'");
                         if(mysql_num_rows($queryResrc) > 0) {
                             $yearMonthSet = array();
                             $sizeSet = array();
@@ -546,7 +546,7 @@
                             foreach ($sizeList as $size) {
                                 if(empty($storyList)) {
                                     $apartSilResult = array_fill(0, count($yearMonthList), 0);
-                                    $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji AND size=$size");
+                                    $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' AND size='$size'");
                                     if(mysql_num_rows($queryResrc) > 0) {
                                         while ($row = mysql_fetch_assoc($queryResrc)) {
                                             $month = "00".$row['month'];
@@ -559,7 +559,7 @@
                                 else {
                                     foreach ($storyList as $story) {
                                         $apartSilResult = array_fill(0, count($yearMonthList), 0);
-                                        $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd=$sigunguCd AND bjdongCd=$bjdongCd AND bun=$bun AND ji=$ji AND size=$size AND story=$story");
+                                        $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' AND size='$size' AND story='$story'");
                                         if(mysql_num_rows($queryResrc) > 0) {
                                             while ($row = mysql_fetch_assoc($queryResrc)) {
                                                 $month = "00".$row['month'];
