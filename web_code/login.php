@@ -99,7 +99,7 @@
 			<div id="body_warp_frame">
 				<div id="login_input_frame">
 					<input type="text" id="userid" name="userid" class="id_pwd_input" placeholder="아이디를 입력하세요.">
-					<input type="pwd" id="pwd" name"pwd"  class="id_pwd_input" placeholder="비밀번호를 입력하세요.">
+					<input type="password" id="pwd" name="pwd"  class="id_pwd_input" placeholder="비밀번호를 입력하세요.">
 				</div>
 				<div id="login_bt_frame_login">
 					<a href="signup.php">
