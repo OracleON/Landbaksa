@@ -17,9 +17,9 @@
 	$cate =$_GET["cate"];
 	$apartment=$_GET["apartment"];
 	
-	
-	$address2=$_GET["address"];
 	/*
+	$address2=$_GET["address"];
+	
 	$lawcode=$_GET["lawcode"];
 	$jibun=$_GET["jibun"];
 	$searchtype = $_GET["searchtype"];
@@ -67,8 +67,20 @@
 	$sil_price = $search_row["sil_price"]; //실 거래가
 	$gong_price = $search_row["gong_price"]; // 공시지가
 	
+	$gong_land_price = $search_row["gong_land_price"]; // 공시지가
 	
-	$fore_profit ='2.1';
+	if($sil_price != 0 && $gong_price !=0)
+	{
+		$fore_profit = floor($sil_price * 100 / $gong_price)."%";
+		
+		$result_price = $gong_price * floor($sil_price * 100 / $gong_price) /100;
+	}else
+	{
+		$fore_profit ='정보없음';
+	}
+	
+	
+	//$fore_profit ='2.1';
 	
 	if($need_price == '0')
 	{
@@ -164,8 +176,8 @@
 	#regdate_frame_title2{float: left; width: 120px; height: 30px; line-height: 30px; font-size: 16px; color: white; font-weight: 800; text-align: center;}
 	#sellprice_frame{float: left; width: 780px; height: 60px; background: white;}
 	#sellprice_frame_title{float: left; width: 90px; height: 60px; margin-left: 10px; line-height: 60px;text-align: center; color: #6a6e79; font-size: 16px;}
-	#sellprice{float: left; width: auto; height: 60px; line-height: 60px; text-align: center; color: #0068b7; font-size: 21px; font-weight: 700;}
-	#sellprice_frame_title2{float: left; width: 30px; height: 60px; line-height: 60px; color: #2e323e; font-style: 15px;
+	#sellprice{float: left; width: auto; height: 60px; line-height: 60px; text-align: center; color: #0068b7; font-size: 21px; font-weight: 700; padding-left: 10px;}
+	#sellprice_frame_title2{float: left; width: 30px; height: 60px; line-height: 60px; color: #2e323e; font-size: 15px;
 	}
 	#sellprice_line{float: left; width: 1px; height: 60px; background:#e3e7e9; margin-left: 30px; }
 	
@@ -180,18 +192,18 @@
 	.tax_frame_content{float: left; width: 230px; height: 50px; line-height: 50px; background: white; color: #2e323e; font-size: 18px; text-align: left; padding-left: 20px; border: 1px solid #e3e7e9;}
 	
 	#interest_frame{float: left; width: 480px; height: auto; margin-left: 20px;}
-	.interest_frame_title2{float: left; left; width: 205px; height: 50px; line-height: 50px; color: #6a6e79; background: #f7f7f7; text-align: left; font-size: 15px; padding-left: 20px; border: 1px solid #e3e7e9;}
+	.interest_frame_title2{float: left; left; width: 205px; height: 50px; line-height: 50px; color: #6a6e79; background: #f7f7f7; text-align: center; font-size: 14px; padding-left: 20px; border: 1px solid #e3e7e9;}
 	.interest_frame_content{float: left; width: 230px; height: 50px; line-height: 50px; background: white; color: #0068b7; font-size: 18px; text-align: left; padding-left: 20px; border: 1px solid #e3e7e9;}
 	
-	#basic_price_state_frame{float: left; width: 900px; height: 400px; margin-top: 20px;}
+	#basic_price_state_frame{float: left; width: 900px; height: 500px; margin-top: 20px;}
 	.basic_price_state_frame_title{float: left; width: 100%; height: 30px; line-height: 30px;  color: #2e323e; font-size: 18px; font-weight: 700; margin-left: 10px; margin-bottom: 5px; text-align: left;}
-	#basic_price_state_graph{float: left; width: 100%; height: 350px; border: 1px solid #e3e7e9; background: white;}
+	#basic_price_state_graph{float: left; width: 100%; height: 450px; border: 1px solid #e3e7e9; background: white;}
 	
-	#real_price_state_frame{float: left; width: 900px; height: 400px; margin-top: 20px;}
-	#real_price_state_graph{float: left; width: 100%; height: 350px; border: 1px solid #e3e7e9; background: white;}
+	#real_price_state_frame{float: left; width: 900px; height: 500px; margin-top: 20px;}
+	#real_price_state_graph{float: left; width: 100%; height: 450px; border: 1px solid #e3e7e9; background: white;}
 	
-	#energy_state_frame{float: left; width: 900px; height: 400px; margin-top: 20px;}
-	#energy_state_graph{float: left; width: 100%; height: 350px; border: 1px solid #e3e7e9; background: white;}
+	#energy_state_frame{float: left; width: 900px; height: 500px; margin-top: 20px;}
+	#energy_state_graph{float: left; width: 100%; height: 450px; border: 1px solid #e3e7e9; background: white;}
 	
 	
 	#sil_price_frame{float: left; width: 900px; height: 280px; min-height: 100px; margin-top: 20px;}
@@ -207,16 +219,31 @@
 	.sil_price_regdate{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
 	.sil_price_apart_name{float: left; width: 300px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
 	
-	.sil_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto;}
+	.sil_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto; overflow-x: hidden;}
 	.sel_price_info_frame{float: left; width: 900px; height: 40px; line-height: 40px; border-bottom: 1px solid #e3e7e9;}
 	.sil_price_size2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
 	.sil_price_story2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
-	.sil_price_amount2{float: left; width: 190px; height: 40px; line-height: 40px;text-align:right; font-size: 13px; color: #2e343e;}
+	.sil_price_amount2{float: left; width: 190px; height: 40px; line-height: 40px;text-align:center; font-size: 13px; color: #2e343e;}
 	.sil_price_regdate2{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
 	.sil_price_apart_name2{float: left; width: 300px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
 	
 	#gong_price_info_fram_title{float: left; width: 900px; height: 40px; line-height: 40px; border-bottom: 1px solid #e3e7e9;}
-	.gong_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto;}
+	.gong_price_info_data_box{float: left; width: 900px; height: 200px;  border: 1px solid #e3e7e9; background: white; overflow-y: auto; overflow-x: hidden;}
+	
+	
+	.gong_price_size{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.gong_price_story{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.gong_price_amount{float: left; width: 190px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.gong_price_result{float: left; width: 190px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.gong_price_regdate{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	.gong_price_apart_name{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #8c8e90;}
+	
+	.gong_price_size2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.gong_price_story2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.gong_price_amount2{float: left; width: 190px; height: 40px; line-height: 40px;text-align:center; font-size: 13px; color: #2e343e;}
+	.gong_price_result2{float: left; width: 190px; height: 40px; line-height: 40px;text-align: center; font-size: 14px; font-weight: 600; color: #d20b3d;}
+	.gong_price_regdate2{float: left; width: 100px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
+	.gong_price_apart_name2{float: left; width: 200px; height: 40px; line-height: 40px;text-align: center; font-size: 13px; color: #2e343e;}
 </style>
 
 
@@ -302,8 +329,8 @@
 							<div id="regdate_frame_title2"><?echo substr($search_row["regdate"], 0,10) ?></div>
 						</div>
 						<div id="sellprice_frame">
-							<div id="sellprice_frame_title">감정가</div>
-							<div id="sellprice"><? echo number_format($result_price)?></div>
+							<div id="sellprice_frame_title">평균 감정가</div>
+							<div id="sellprice"><? echo "  ".number_format($result_price)?> </div>
 							<div id="sellprice_frame_title2">원</div>
 							
 							<div id="sellprice_line"></div>
@@ -314,6 +341,9 @@
 						</div>
 					</div>
 				</div>
+				<script>
+					console.log('11111');
+				</script>
 				<!-- 매매,정보 -->
 				<div id="basic_info_frame">
 					<!--
@@ -335,8 +365,8 @@
 					<div class="info_frame_line"></div>
 					<div class="basic_info_frame_title">현 수익률</div>
 					<div class="basic_info_frame_content"><? echo $profit?>%</div>
-					<div class="basic_info_frame_title">예상 성장률</div>
-					<div class="basic_info_frame_content"><? echo $fore_profit?>% (최근3년 공시지가평균 성장율)</div>
+					<div class="basic_info_frame_title">공시지가/실거래가</div>
+					<div class="basic_info_frame_content"><? echo $fore_profit?> (공시가 대비 실거래가)</div>
 				</div>
 				
 				<!-- 세금,수익률 정보 -->
@@ -364,6 +394,60 @@
 					<div class="interest_frame_content"><? echo number_format($predict_money1)?> 원</div>
 				</div>
 				
+				<div id="gong_price_frame">
+					<div class="basic_price_state_frame_title">공시지가 정보 / 감정가 정보</div>
+					<div id="gong_price_info_frame">
+						<div id="gong_price_info_fram_title">
+							<div class='gong_price_size'>전용면적</div>
+							<div class='gong_price_story'>구분</div>
+							<div class='gong_price_amount'>공시지가</div>
+							<div class='gong_price_result'>감정가</div>
+							<div class='gong_price_regdate'>기준일자</div>
+							<div class='gong_price_apart_name'>이름</div>
+						</div>
+						<div class="gong_price_info_data_box">
+						<?
+							
+							
+							$gong_pricesql = mysql_query("SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY stdrYear DESC, stdrMt DESC,prvuseAr ASC");
+							//echo "SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY seq DESC";
+							$gongprice_count = mysql_num_rows($gong_pricesql);
+							echo '<script>
+                                    console.log(\''.$gongprice_count.'\');
+                                </script>';
+							if($gongprice_count > 1)
+							{
+								while($gongprice_row = mysql_fetch_array($gong_pricesql))
+								{
+									echo '<div class="sel_price_info_frame">
+												<div class="gong_price_size2">'.floor($gongprice_row['prvuseAr']*0.3025).'(평)</div>
+												<div class="gong_price_story2">아파트</div>
+												<div class="gong_price_amount2">'.number_format($gongprice_row['pblntfPc']).'원</div>
+												<div class="gong_price_result2">'.number_format($gongprice_row['pblntfPc']*$fore_profit/100).'원</div>
+												
+												<div class="gong_price_regdate2">'.$gongprice_row['stdrYear'].'-'.$gongprice_row['stdrMt'].'</div>
+												<div class="gong_price_apart_name2">'.$gongprice_row['aphusNm'].'</div>
+											</div>';
+                                    echo '<script>
+                                    console.log(\''.$gongprice_row['pblntfPc'].'\');
+                                </script>';
+								}
+							}else
+							{
+								echo '<div class="sel_price_info_frame">
+										해당 물건은 공시지가 공개내역이 없습니다.
+									</div>';
+							}
+							
+						?>
+						</div>
+					</div>	
+				</div>
+				
+				<script>
+					console.log('22222');
+				</script>
+				
 				<div id="sil_price_frame">
 					<div class="basic_price_state_frame_title">실거래가 정보</div>
 					<div id="sil_price_info_frame">
@@ -376,20 +460,20 @@
 						</div>
 						<div class="sil_price_info_data_box">
 						<?
-							$sil_pricesql = mysql_query("SELECT * FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY year,month,day DESC");
+							$sil_pricesql = mysql_query("SELECT * FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY year DESC ,month DESC ,day DESC");
 							
 							$silprice_count = mysql_num_rows($sil_pricesql);
 							
 							
 							
-							if($silprice_count > 1)
+							if($silprice_count > 0)
 							{
 								while($silprice_row = mysql_fetch_array($sil_pricesql))
 								{
 									$temp_silprice = str_replace(",", "", $silprice_row[amount])."0000"; 
 									
 									echo '<div class="sel_price_info_frame">
-												<div class="sil_price_size2">'.$silprice_row[size].'</div>
+												<div class="sil_price_size2">'.floor($silprice_row[size] * 0.3025).'(평)</div>
 												<div class="sil_price_story2">'.$silprice_row[story].'</div>
 												<div class="sil_price_amount2">'.number_format($temp_silprice).'원</div>
 												<div class="sil_price_regdate2">'.$silprice_row[year].'-'.$silprice_row[month].'-'.$silprice_row[day].'</div>
@@ -409,48 +493,17 @@
 					</div>	
 				</div>
 				
-				<div id="gong_price_frame">
-					<div class="basic_price_state_frame_title">공시지가 정보</div>
-					<div id="gong_price_info_frame">
-						<div id="gong_price_info_fram_title">
-							<div class='sil_price_size'>전용면적</div>
-							<div class='sil_price_story'>구분</div>
-							<div class='sil_price_amount'>공시지가</div>
-							<div class='sil_price_regdate'>기준일자</div>
-							<div class='sil_price_apart_name'>이름</div>
-						</div>
-						<div class="gong_price_info_data_box">
-						<?
-							
-							
-							$gong_pricesql = mysql_query("SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY seq DESC");
-							//echo "SELECT * FROM landbaksa_gongprice_apart_info WHERE ldCode='$lawcode' AND mnnmSlno='$jibun' ORDER BY seq DESC";
-							$gongprice_count = mysql_num_rows($gong_pricesql);
-							if($gongprice_count > 1)
-							{
-								while($gongprice_row = mysql_fetch_array($gong_pricesql))
-								{
-									echo '<div class="sel_price_info_frame">
-												<div class="sil_price_size2">'.$gongprice_row[prvuseAr].'</div>
-												<div class="sil_price_story2">아파트</div>
-												<div class="sil_price_amount2">'.number_format($gongprice_row[pblntfPc]).' 원</div>
-												<div class="sil_price_regdate2">'.$gongprice_row[lastUpdtDt].'</div>
-												<div class="sil_price_apart_name2">'.$gongprice_row[aphusNm].'</div>
-											</div>';
-								}
-							}else
-							{
-								echo '<div class="sel_price_info_frame">
-										해당 물건은 공시지가 공개내역이 없습니다.
-									</div>';
-							}
-							
-						?>
-						</div>
-					</div>	
-				</div>
+				<script>
+					console.log('3333333');
+				</script>
+					
 				
+				
+				<script>
+					console.log('44444');
+				</script>
 				<!-- 공시지가 성장률 -->
+				
 				<div id="basic_price_state_frame">
 					<div class="basic_price_state_frame_title">공시지가 성장률</div>
 					<div id="basic_price_state_graph">
@@ -478,7 +531,7 @@
                                 while ($row = mysql_fetch_assoc($queryResrc)) {
                                     $apartResult[$yearToIndex[$row['stdrYear']]] = $row['AVG(pblntfPc)'];
                                 }
-                                $gongPriceResult['데이터']['아파트('.$prvuseAr.')'] = $apartResult;
+                                $gongPriceResult['데이터']['아파트('.floor($prvuseAr*0.3025).'평)'] = $apartResult;
                             }
                         }
 
@@ -507,6 +560,7 @@
 				</div>
 				
 				<!-- 실거래가 성장률 -->
+				
 				<div id="real_price_state_frame">
 					<div class="basic_price_state_frame_title">실거래가 성장률</div>
 					<div id="real_price_state_graph">
@@ -515,68 +569,66 @@
                     <?
                         // 실거래가 데이터
                         $silPriceResult = array("기준년월" => array(), "데이터" => array());
-                        $queryResrc = mysql_query("SELECT "."year, month, size, story"." FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji'");
+                        $queryResrc = mysql_query("SELECT year, month, size, story, amount FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' ORDER BY convert('year', decimal), convert('month', decimal)");
+
                         if(mysql_num_rows($queryResrc) > 0) {
                             $yearMonthSet = array();
-                            $sizeSet = array();
-                            $storySet = array();
+                            $yearMonthCount = 0;
+                            $dupCheckSet = array();
+
                             while ($row = mysql_fetch_assoc($queryResrc)) {
+                                $dupCheckKey = $row['year'].$row['month'].$row['size'].$row['story'].'';
+                                if(array_key_exists($dupCheckKey, $dupCheckSet))
+                                    continue;
+                                $dupCheckSet[$dupCheckKey] = $row['amount'];
+
                                 $month = "00".$row['month'];
                                 $month = substr($month, -2,2);
+
+                                $preCount = count(array_keys($yearMonthSet));
                                 $yearMonthSet[$row['year'].$month] = 0;
-                                $sizeSet[$row['size'].''] = 0;
+                                $afterCount = count(array_keys($yearMonthSet));
+                                if($afterCount > $preCount)
+                                    $yearMonthCount++;
+
+                                $sizeStoryCatName = '';
                                 if($row['story'] != NULL)
-                                    $storySet[$row['story'].''] = 0;
+                                    $sizeStoryCatName = '아파트('.floor($row['size']*0.3025).'평, '.$row['story'].'층)';
+                                else
+                                    $sizeStoryCatName = '아파트('.floor($row['size']*0.3025).'평)';
+
+                                $zeroFillCount = 0;
+                                if(!array_key_exists($sizeStoryCatName, $silPriceResult['데이터'])) {
+                                    $silPriceResult['데이터'][$sizeStoryCatName] = array();
+                                    $zeroFillCount = $yearMonthCount - 1;
+                                }
+                                else
+                                    $zeroFillCount = $yearMonthCount - count($silPriceResult['데이터'][$sizeStoryCatName]) - 1;
+
+                                for($i = 0; $i<$zeroFillCount; $i++)
+                                    $silPriceResult['데이터'][$sizeStoryCatName][] = 0;
+
+                                $silPriceResult['데이터'][$sizeStoryCatName][] = str_replace(',', '', $row['amount']);
                             }
 
                             $yearMonthList = array_keys($yearMonthSet);
                             sort($yearMonthList);
-                            $sizeList = array_keys($sizeSet);
-                            $storyList = array_keys($storySet);
-
                             $silPriceResult['기준년월'] = $yearMonthList;
 
-                            $yearMonthToIndex = array();
-                            $countVal = 0;
-                            foreach ($yearMonthList as $yearMonth) {
-                                $yearMonthToIndex[$yearMonth] = $countVal;
-                                $countVal++;
-                            }
-
-                            foreach ($sizeList as $size) {
-                                if(empty($storyList)) {
-                                    $apartSilResult = array_fill(0, count($yearMonthList), 0);
-                                    $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' AND size='$size'");
-                                    if(mysql_num_rows($queryResrc) > 0) {
-                                        while ($row = mysql_fetch_assoc($queryResrc)) {
-                                            $month = "00".$row['month'];
-                                            $month = substr($month, -2,2);
-                                            $apartSilResult[$yearMonthToIndex[$row['year'].$month]] = str_replace(',', '', $row['amount']);
-                                        }
-                                        $silPriceResult['데이터']['아파트('.$size.')'] = $apartSilResult;
-                                    }
-                                }
-                                else {
-                                    foreach ($storyList as $story) {
-                                        $apartSilResult = array_fill(0, count($yearMonthList), 0);
-                                        $queryResrc = mysql_query("SELECT "."year, month, amount FROM landbaksa_silprice_info WHERE sigunguCd='$sigunguCd' AND bjdongCd='$bjdongCd' AND bun='$bun' AND ji='$ji' AND size='$size' AND story='$story'");
-                                        if(mysql_num_rows($queryResrc) > 0) {
-                                            while ($row = mysql_fetch_assoc($queryResrc)) {
-                                                $month = "00".$row['month'];
-                                                $month = substr($month, -2,2);
-                                                $apartSilResult[$yearMonthToIndex[$row['year'].$month]] = str_replace(',', '', $row['amount']);
-                                            }
-                                            $silPriceResult['데이터']['아파트('.$size.', '.$story.'층)'] = $apartSilResult;
-                                        }
-                                    }
-                                }
+                            $dataKey = array_keys($silPriceResult['데이터']);
+                            $dateNum = count($yearMonthList);
+                            foreach ($dataKey as $key) {
+                                $zero = $dateNum - count($silPriceResult['데이터'][$key]);
+                                for($i = 0; $i<$zero; $i++)
+                                    $silPriceResult['데이터'][$key][] = 0;
                             }
                         }
                         $silPriceResult = json_encode($silPriceResult);
                     ?>
 				</div>
-				
+			
 				<!-- 에너지 사용량 성장률 -->
+				
 				<div id="energy_state_frame">
 					<div class="basic_price_state_frame_title">에너지 사용량 분석</div>
 					<div id="energy_state_graph">
@@ -597,97 +649,109 @@
                         $energyResult = json_encode($energyResult);
                     ?>
 				</div>
-
+				
                 <script>
-                    function getOption(legend, xData, ySeriesData, titleText, yAxisName) {
-                        var graphOption = {
-                            title : {
-                                text: titleText
-                            },
-                            tooltip : {
-                                trigger: 'axis'
-                            },
-                            legend: {
-                                data: legend
-                            },
-                            toolbox: {
-                                show : false,
-                                feature : {
-                                    dataZoom : {show: true},
-                                    dataView : {show: true, readOnly: true},
-                                    magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                                    restore : {show: true},
-                                    saveAsImage : {show: true}
-                                }
-                            },
-                            calculable : true,
-                            dataZoom : {show : true, start : 0, end : 100},
-                            xAxis : [
-                                {
-                                    type : 'category',
-                                    // boundaryGap : false,
-                                    data : xData
-                                }
-                            ],
-                            yAxis : [
-                                {
-                                    type : 'value',
-                                    name : yAxisName
-                                }
-                            ],
-                            series : (function(){
-                                var result = [];
-                                legend.forEach(function(legendName) {
-                                    var dataForm = {
-                                        name: undefined,
-                                        type: 'bar',
-                                        smooth: true,
-                                        // itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                                        data: undefined
-                                    };
-                                    dataForm.name = legendName;
-                                    dataForm.data = ySeriesData[legendName];
-                                    result.push(dataForm);
-                                });
-                                return result;
-                            })(),
-                        };
-                        return graphOption;
-                    }
+                    $(document).ready(function(){
+                        function getOption(legend, xData, ySeriesData, titleText, yAxisName) {
+                            var graphOption = {
+                                title : {
+                                    text: titleText
+                                },
+                                tooltip : {
+                                    trigger: 'axis',
+                                },
+                                legend: {
+                                    data: legend,
+                                    padding : 0
+                                },
+                                toolbox: {
+                                    show : true,
+                                    feature : {
+                                        dataZoom : {show: true},
+                                        dataView : {show: true, readOnly: true},
+                                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                        restore : {show: true},
+                                        saveAsImage : {show: true}
+                                    },
+                                    orient : 'vertical',
+                                    y : 'center'
+                                },
+                                calculable : true,
+                                dataZoom : {show : true, start : 0, end : 100},
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        // boundaryGap : false,
+                                        data : xData
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        name : yAxisName
+                                    }
+                                ],
+                                series : (function(){
+                                    var result = [];
+                                    legend.forEach(function(legendName) {
+                                        var dataForm = {
+                                            name: undefined,
+                                            type: 'bar',
+                                            smooth: true,
+                                            // itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                            data: undefined
+                                        };
+                                        dataForm.name = legendName;
+                                        dataForm.data = ySeriesData[legendName];
+                                        result.push(dataForm);
+                                    });
+                                    return result;
+                                })(),
+                            };
+                            return graphOption;
+                        }
 
 
-                    // 공시지가 그래프 생성
-                    var gongPriceJSON = JSON.parse('<?echo $gongPriceResult?>');
-                    console.log(gongPriceJSON);
-                    if(Object.keys(gongPriceJSON['데이터']).length) {
-                        var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
-                        gongPriceGraph.setOption(getOption(Object.keys(gongPriceJSON['데이터']), gongPriceJSON['기준년도'], gongPriceJSON['데이터'], '', '공시가격'));
-                        window.addEventListener("resize", function() {
-                            gongPriceGraph.resize();
-                        });
-                    }
+                        // 공시지가 그래프 생성
+                        var gongPriceJSON = JSON.parse('<?echo $gongPriceResult?>');
+                        console.log(gongPriceJSON);
 
-                    // 실거래가 그래프 생성
-                    var silPriceJSON = JSON.parse('<?echo $silPriceResult?>');
-                    console.log(silPriceJSON);
-                    if(silPriceJSON['기준년월'].length) {
-                        var silPriceGraph = echarts.init(document.getElementById('real_price_state_graph'), theme);
-                        silPriceGraph.setOption(getOption(Object.keys(silPriceJSON['데이터']), silPriceJSON['기준년월'], silPriceJSON['데이터'], '', '실거래가격'));
-                        window.addEventListener("resize", function() {
-                            silPriceGraph.resize();
-                        });
-                    }
+                        if(Object.keys(gongPriceJSON['데이터']).length) {
+                            var gongPriceGraph = echarts.init(document.getElementById('basic_price_state_graph'), theme);
+                            gongPriceGraph.setOption(getOption(Object.keys(gongPriceJSON['데이터']), gongPriceJSON['기준년도'], gongPriceJSON['데이터'], '', '공시가격'));
+                            window.addEventListener("resize", function() {
+                                gongPriceGraph.resize();
+                            });
+                        }
 
-                    // 에너지 그래프 생성
-                    var energyJSON = JSON.parse('<?echo $energyResult?>');
-                    console.log(energyJSON);
-                    if(energyJSON['기준년월'].length) {
-                        var energyGraph = echarts.init(document.getElementById('energy_state_graph'), theme);
-                        energyGraph.setOption(getOption(['에너지 사용량'], energyJSON['기준년월'], energyJSON['데이터'], '', '사용량'));
-                        window.addEventListener("resize", function() {
-                            energyGraph.resize();
-                        });
-                    }
+
+                        // 실거래가 그래프 생성
+                        var silPriceJSON = JSON.parse('<?echo $silPriceResult?>');
+                        console.log(silPriceJSON);
+
+
+                        if(silPriceJSON['기준년월'].length) {
+                            var silPriceGraph = echarts.init(document.getElementById('real_price_state_graph'), theme);
+                            silPriceGraph.setOption(getOption(Object.keys(silPriceJSON['데이터']), silPriceJSON['기준년월'], silPriceJSON['데이터'], '', '실거래가격'));
+                            window.addEventListener("resize", function() {
+                                silPriceGraph.resize();
+                            });
+                        }
+
+
+                        // 에너지 그래프 생성
+                        var energyJSON = JSON.parse('<?echo $energyResult?>');
+                        console.log(energyJSON);
+
+
+                        if(energyJSON['기준년월'].length) {
+                            var energyGraph = echarts.init(document.getElementById('energy_state_graph'), theme);
+                            energyGraph.setOption(getOption(['에너지 사용량'], energyJSON['기준년월'], energyJSON['데이터'], '', '사용량'));
+                            window.addEventListener("resize", function() {
+                                energyGraph.resize();
+                            });
+                        }
+                    });
                 </script>
 				 
 			</div>
