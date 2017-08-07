@@ -46,18 +46,18 @@
 	#mysearch_frame{float: left; width: 100%; height: 450px; border: 1px solid #e3e7e9; background: white; margin-top: 10px; overflow: auto;}
 	
 	#mysearch_frame_header{float: left; width: 800px; height: 40px; border-bottom: 1px solid #d6dbdd;}
-	#search_date{float: left; width: 100px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
-	#search_type{float: left; width: 100px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
+	#search_date{float: left; width: 90px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
+	#search_type{float: left; width: 90px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
 	#search_address{float: left; width: 360px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
 	#search_gong{float: left; width: 120px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
 	#search_sil{float: left; width: 120px; height: 40px; line-height: 40px; text-align: center; color: #8c8e90; font-size: 14px;}
 	
 	.mysearch_frame_line{float: left; width: 800px; height: 45px; border-bottom: 1px solid #d6dbdd;}
-	.search_date{float: left; width: 100px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
-	.search_type{float: left; width: 100px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
+	.search_date{float: left; width: 90px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
+	.search_type{float: left; width: 90px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
 	.search_address{float: left; width: 360px; height: 45px; line-height: 45px; text-align: center; color: #2469ca; font-size: 13px; text-align: left;}
-	.search_gong{float: left; width: 120px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
-	.search_sil{float: left; width: 120px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 13px;}
+	.search_gong{float: left; width: 120px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 12px;}
+	.search_sil{float: left; width: 120px; height: 45px; line-height: 45px; text-align: center; color: #2e343e; font-size: 12px;}
 </style>
 
 
