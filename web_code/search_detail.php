@@ -121,9 +121,11 @@
 								{
 									changeok = "ok";
 									//alert('로그인 성공입니다.');
-									$('#output').empty().append('온라인 감정 성공 입니다.');
-									$('#output2').empty().append('분석결과 페이지로 이동합니다.');
+									$('#output').empty().append('에너지자료 수집완료 입니다.');
+									$('#output2').empty().append('공시지가 데이터를 수집중 입니다..');
 									
+									getGong();
+									/*
 									setTimeout(function(){
 												//$('#loading').fadeOut();
 												//$("#loding").popup("close");
@@ -131,6 +133,7 @@
 												
 												location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=info&history_seq="+historyseq;
 												 }, 1000);
+									*/
 								}
 								if(value == "no")
 								{
@@ -200,6 +203,102 @@
 	      }
 	     return outNum;
 	
+	}
+	
+	
+	
+	function getGong()
+	{
+		var tempaddress = $('#address').val();
+		var tempsellprice = $('#sellprice').val();
+		var tempbankprice = $('#bankprice').val();
+		var tempdepositprice = $('#depositprice').val();
+		var tempmonthprice = $('#monthprice').val();
+		
+		
+		var tempaddress2 = tempaddress.replace('(', '');
+		tempaddress2 = tempaddress2.replace(')', '');
+		var Array_address = tempaddress2.replace(',', '').split(' ');
+		//alert(Array_address[0]+'/'+Array_address[1]+'/'+Array_address[2]);
+		
+		//alert('감정시작!!');
+		var tempuserid = '<?echo $userid?>';
+		var lawcode = $('#lawcode').val();
+		var jibun = $('#jibun').val();
+		var apartment = $('#apartment').val();
+		
+		var historyseq ='';
+		
+		$('#background_layer').fadeIn();
+		$('#loading').fadeIn();
+		
+		var getparams = {userid:tempuserid,username:'<?echo $username?>',law_code:lawcode,ji_bun:jibun,apartment_type:apartment,search_type:'info',address:tempaddress,sellprice:tempsellprice,bankprice:tempbankprice,depositprice:tempdepositprice,monthprice:tempmonthprice};
+		
+		
+		$.getJSON("CollectionInfo2.php",getparams,function(data){	
+			$.each(data, function(key, value){
+					if(key == "history_seq")
+					{
+						historyseq = value;
+					}
+					
+					if(key == "signupJson")
+					{
+						if(value == "insertok")
+						{
+							changeok = "ok";
+							//alert('로그인 성공입니다.');
+							$('#output').empty().append('온라인 감정 성공 입니다.');
+							$('#output2').empty().append('분석결과 페이지로 이동합니다.');
+							
+							setTimeout(function(){
+										//$('#loading').fadeOut();
+										//$("#loding").popup("close");
+										//$('#loading').hide();
+										
+										location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment+"&searchtype=address&history_seq="+historyseq;
+										 }, 1000);
+							
+						}
+						if(value == "no")
+						{
+							changeok = "not";	
+							$('#output2').empty().append('감정정보가 부족합니다.');
+							//$('#loading').hide();
+							setTimeout(function(){
+										alert('감정에 실패하였습니다..');
+										$('#background_layer').fadeOut();
+										$('#loading').fadeOut();
+										 }, 1000);
+							
+						}
+
+						if(value == "error")
+						{
+							changeok = "not";
+							$('#output').append('DATA BASE ERROR!!!!.');
+							setTimeout(function(){
+										$('#loading').fadeOut();
+										$('#background_layer').fadeOut();
+										//$("#loding").popup("close");
+										//$('#loading').hide();
+										 }, 1000);
+						}
+						
+					}
+					
+			});
+			
+			if(changeok =="ok")
+			{
+				//location.href = "http://pianoontest.cafe24.com/landbaksa/web_code/result.php?cate=1&address="+Array_address+"&lawcode="+lawcode+"&jibun="+jibun+"&apartment="+apartment;
+				
+			}else{
+				//alert('감정에 실패하였습니다..');
+				//$('#background_layer').fadeOut();
+				//$('#loading').fadeOut();
+			}	
+		});	
 	}
 
 </script>
@@ -348,7 +447,7 @@
 	
 	#loading{
 	 		z-index: 10;
-	 		height:100px;
+	 		height:200px;
 			width:400px;
 			background:white;
 			border:1px #0068b7 solid;
@@ -387,7 +486,16 @@
 		 display:none;
 	 }
 
-
+	 #loading_img{
+		 float: left;
+		 width: 100px;
+		 height: 100px;
+		 margin-left: 150px;
+	 }
+	 .loading_img{
+		 width: 100px;
+		 height: 100px;
+	 }
 </style>
 
 
@@ -400,6 +508,9 @@
 			
 			<div id="output">온라인 감정중...</div>
 			<div id="output2">공시지가,실거래가,에너지사용량 분석중</div>
+			<div id="loading_img">
+				<img src="/landbaksa/images/loading.gif" class="loading_img">
+			</div>
 		</div>
 		
 		<div id='top_warp'>
